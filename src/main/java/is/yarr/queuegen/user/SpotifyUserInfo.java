@@ -1,6 +1,25 @@
 package is.yarr.queuegen.user;
 
-public record SpotifyUserInfo(String id, String name, String email, String avatarUrl) implements UserInfo {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity(name = "user_info")
+public final class SpotifyUserInfo implements UserInfo {
+
+    @Id
+    private String id;
+    private String name;
+    private String email;
+    private String avatarUrl;
+
+    public SpotifyUserInfo() {}
+
+    public SpotifyUserInfo(String id, String name, String email, String avatarUrl) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.avatarUrl = avatarUrl;
+    }
 
     @Override
     public String getId() {
@@ -20,5 +39,17 @@ public record SpotifyUserInfo(String id, String name, String email, String avata
     @Override
     public String getAvatarUrl() {
         return avatarUrl;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "SpotifyUserInfo{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                '}';
     }
 }

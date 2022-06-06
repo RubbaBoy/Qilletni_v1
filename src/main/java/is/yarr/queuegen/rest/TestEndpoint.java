@@ -1,5 +1,7 @@
 package is.yarr.queuegen.rest;
 
+import is.yarr.queuegen.auth.AuthHandler;
+import is.yarr.queuegen.auth.SessionHandler;
 import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,66 +11,88 @@ import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class TestEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestEndpoint.class);
 
-    private static final String clientId = System.getenv("SPOTIFY_CLIENT_ID");
-    private static final String clientSecret = System.getenv("SPOTIFY_CLIENT_SECRET");
-    private static final URI redirectUri = URI.create("http://localhost:8000/redirect");
+    private final AuthHandler authHandler;
+    private final SessionHandler sessionHandler;
 
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId(clientId)
-            .setClientSecret(clientSecret)
-            .setRedirectUri(redirectUri)
-            .build();
-
-    /*
-     * Step 1: User goes to /login and gets redirected to the Spotify OAuth page
-     */
-
-    record UserData(String token, String accessToken) {}
-
+    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler) {
+        this.authHandler = authHandler;
+        this.sessionHandler = sessionHandler;
+    }
 
     @GetMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest request) {
-        // codeVerifier -> a cryptographically random string between 43 and 128 characters in length. It can contain letters, digits, underscores, periods, hyphens, or tildes and is generated
-        // codeChallenge -> base64url encoded sha256-hash of the code verifier
-        AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri().state("STATE").build();
-//        return new ResponseEntity<>(authorizationCodeUriRequest.execute().toString(), HttpStatus.PERMANENT_REDIRECT);
-//        return authorizationCodeUriRequest.execute().toString();
-        return new ResponseEntity<>(new MultiValueMapAdapter<>(Map.of("Location", List.of(authorizationCodeUriRequest.execute().toString()))), HttpStatus.PERMANENT_REDIRECT);
+    public ResponseEntity<?> login() {
+        return new ResponseEntity<>(new MultiValueMapAdapter<>(Map.of("Location", List.of(authHandler.beginAuth().toString()))), HttpStatus.PERMANENT_REDIRECT);
     }
 
     @GetMapping("/redirect")
-    public ResponseEntity<?> test(HttpServletRequest request) throws IOException, ParseException, SpotifyWebApiException {
+    public CompletableFuture<ResponseEntity<?>> test(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException, SpotifyWebApiException {
         System.out.println(request.getQueryString());
         // Get `code` from query
 
         var query = UriComponentsBuilder.newInstance().query(request.getQueryString()).build().getQueryParams()
                 .toSingleValueMap();
 
-        System.out.println("query = " + query);
+        return authHandler.completeAuth(query.get("code"))
+                .thenApply(userSession -> {
 
-        var authorizationCodeRequest = spotifyApi.authorizationCode(query.get("code")).build();
-        var authorizationCodeCredentials = authorizationCodeRequest.execute();
-//
-////        // Set access and refresh token for further "spotifyApi" object usage
-        spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-        spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-//
-//        System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+                    response.addCookie(new Cookie("session", userSession.getSessionId().toString()));
+
+//                    userSession.getSessionId()
+//                            return new ResponseEntity<>(new MultiValueMapAdapter<>(Map.of("Set-Cookie", List.of("session="))), HttpStatus.OK);
+                    return new ResponseEntity<>("Hello " + userSession.getUserInfo().getName(), HttpStatus.OK);
+                });
+    }
+
+    // A client would initially request this to verify its login stuff
+    @GetMapping("/verify")
+    public ResponseEntity<?> verify(HttpServletRequest request, HttpServletResponse response) {
+        var cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            LOGGER.info("{} = {}", cookie.getName(), cookie.getValue());
+        }
+
+        var sessionIdOptional = Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equalsIgnoreCase("session"))
+                .findFirst();
+
+        if (sessionIdOptional.isPresent()) {
+            var sessionId = UUID.fromString(sessionIdOptional.get().getValue());
+            var userInfoOptional = sessionHandler.getUserInfo(sessionId);
+
+            if (userInfoOptional.isEmpty()) {
+                LOGGER.info("Invalid session! id: {}", sessionId);
+                var cookie = new Cookie("session", null);
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+
+            var userInfo = userInfoOptional.get();
+
+            LOGGER.info("Session is for: {}", userInfo.getName());
+
+            return new ResponseEntity<>(userInfo, HttpStatus.OK);
+        }
+
+        LOGGER.info("No session found!");
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

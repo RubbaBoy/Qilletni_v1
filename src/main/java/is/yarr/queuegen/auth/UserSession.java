@@ -10,7 +10,7 @@ import java.util.UUID;
  * @param userInfo The {@link UserInfo}
  * @param sessionId The session ID
  */
-record UserSession(UserInfo userInfo, UUID sessionId) {
+public record UserSession(UserInfo userInfo, UUID sessionId) {
 
     /**
      * Gets the {@link UserInfo} associated with this session.

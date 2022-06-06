@@ -1,6 +1,8 @@
 package is.yarr.queuegen.auth;
 
-import java.util.Date;
+import is.yarr.queuegen.user.UserInfo;
+
+import java.sql.Timestamp;
 
 /**
  * Holds time-specific OAuth token data. This object should be held onto as infrequently as possible, and accessed
@@ -27,7 +29,7 @@ public interface Token {
      *
      * @return The token expiry time
      */
-    Date getAccessTokenExpiry();
+    Timestamp getAccessTokenExpiry();
 
     /**
      * If the {@link #getAccessTokenExpiry()} has passed. After this, it should be refreshed.

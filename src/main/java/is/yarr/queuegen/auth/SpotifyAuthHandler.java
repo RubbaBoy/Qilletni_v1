@@ -2,6 +2,8 @@ package is.yarr.queuegen.auth;
 
 import is.yarr.queuegen.spotify.SpotifyApiFactory;
 import is.yarr.queuegen.user.UserStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
@@ -10,6 +12,8 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class SpotifyAuthHandler implements AuthHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpotifyAuthHandler.class);
 
     private static final URI REDIRECT_URI = URI.create(System.getenv("REDIRECT_URL"));
 
@@ -36,7 +40,7 @@ public class SpotifyAuthHandler implements AuthHandler {
 
     @Override
     public CompletableFuture<UserSession> completeAuth(String code) {
-        var spotifyApi = spotifyApiFactory.createAnonApi();
+        var spotifyApi = spotifyApiFactory.createAnonApi(REDIRECT_URI);
         var authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 
         return authorizationCodeRequest.executeAsync()

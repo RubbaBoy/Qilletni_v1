@@ -19,14 +19,6 @@ public interface TokenStore {
     CompletableFuture<Optional<Token>> getToken(UserInfo userInfo);
 
     /**
-     * Sets a {@link Token} to a given user. If a token has previously been set, this will override it.
-     *
-     * @param userInfo The {@link UserInfo} that the token is for
-     * @param token The {@link Token} to set
-     */
-    void setToken(UserInfo userInfo, Token token);
-
-    /**
      * Refreshes the access token for the given {@link UserInfo}, and returns the new updated {@link Token}. If no token
      * has been set for the user, an empty Optional is returned.
      *

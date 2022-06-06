@@ -1,8 +1,13 @@
 package is.yarr.queuegen.user;
 
+import is.yarr.queuegen.database.UserInfoRepository;
 import is.yarr.queuegen.spotify.SpotifyApiFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.model_objects.specification.User;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -10,35 +15,53 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class PersistentUserStore implements UserStore {
 
-    private final SpotifyApiFactory spotifyApiFactory;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersistentUserStore.class);
 
-    public PersistentUserStore(SpotifyApiFactory spotifyApiFactory) {
+    private final SpotifyApiFactory spotifyApiFactory;
+    private final UserInfoRepository userInfoRepository;
+
+    public PersistentUserStore(SpotifyApiFactory spotifyApiFactory, UserInfoRepository userInfoRepository) {
         this.spotifyApiFactory = spotifyApiFactory;
+        this.userInfoRepository = userInfoRepository;
     }
 
+    @Async
     @Override
     public CompletableFuture<Boolean> userExists(String spotifyId) {
-        throw new UnsupportedOperationException("userExists"); // TODO: userExists
+        return CompletableFuture.completedFuture(userInfoRepository.existsById(spotifyId));
     }
 
     @Override
     public CompletableFuture<UserInfo> getOrCreateUser(AuthorizationCodeCredentials authorizationCodeCredentials) {
         var profileRequest = spotifyApiFactory.createApi(authorizationCodeCredentials).getCurrentUsersProfile().build();
         return profileRequest.executeAsync()
-                .thenApply(user -> {
+                .thenApplyAsync(user -> {
+                    var spotifyId = user.getId();
 
-                    // TODO: Check if user.getId() is contained in the repository. If so, return it!
-                    //       otherwise:
+                    var userInfoOptional = userInfoRepository.findById(spotifyId);
+                    if (userInfoOptional.isPresent()) {
+                        LOGGER.info("User with id {} already found!", spotifyId);
+                        return userInfoOptional.get();
+                    }
 
+                    var userInfo = new SpotifyUserInfo(spotifyId, user.getDisplayName(), user.getEmail(), getAvatarUrl(user));
+                    LOGGER.info("Saving user: {}", userInfo);
+                    userInfoRepository.save(userInfo);
 
-                    // TODO: save UserInfo into repository!
-                    var images = user.getImages();
-                    return new SpotifyUserInfo(user.getId(), user.getDisplayName(), user.getEmail(), images.length > 0 ? images[0].getUrl() : "");
+                    return userInfo;
                 });
     }
 
+    @Async
     @Override
     public CompletableFuture<Optional<UserInfo>> getUser(String spotifyId) {
-        throw new UnsupportedOperationException("getUser"); // TODO: getUser
+        LOGGER.info("Getting user on thread: {}", Thread.currentThread());
+        return CompletableFuture.completedFuture(userInfoRepository.findById(spotifyId)
+                .map(UserInfo.class::cast));
+    }
+
+    private String getAvatarUrl(User user) {
+        var images = user.getImages();
+        return images.length > 0 ? images[0].getUrl() : "";
     }
 }
