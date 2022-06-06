@@ -1,0 +1,92 @@
+buildscript {
+    ext {
+        projectVersion = '2.14.0-SNAPSHOT'
+
+        // https://github.com/grpc/grpc-java/releases
+        grpcVersion = '1.46.0'
+
+        // https://github.com/google/guava/releases
+        guavaVersion = '31.1-jre'
+        // https://github.com/protocolbuffers/protobuf/releases
+        protobufVersion = '3.21.1'
+        protobufGradlePluginVersion = '0.8.18'
+
+        // https://github.com/spring-projects/spring-boot/releases
+        springBootVersion = '2.6.7'
+        // https://github.com/spring-cloud/spring-cloud-release/releases
+        springCloudVersion = '2021.0.3'
+        // https://github.com/alibaba/spring-cloud-alibaba/releases
+        springCloudAlibabaNacosVersion = '2021.1'
+
+        lombokPluginVersion = '6.4.3'
+        versioningPluginVersion = '2.15.1'
+        versionsPluginVersion = '0.42.0'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.6.3' // 2.7.0
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.google.protobuf' version '0.8.18'
+    id 'java'
+}
+
+group = 'is.yarr.queuegen'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3'
+
+    implementation 'org.postgresql:postgresql:42.3.1'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    implementation 'org.hibernate.search:hibernate-search-mapper-orm:6.1.0.Final'
+    implementation 'org.modelmapper:modelmapper:3.0.0'
+    implementation 'se.michaelthelin.spotify:spotify-web-api-java:7.1.0'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+
+    implementation 'net.devh:grpc-spring-boot-starter:2.13.1.RELEASE'
+    implementation 'net.devh:grpc-server-spring-boot-starter:2.13.1.RELEASE'
+
+    implementation 'org.springframework.security:spring-security-web:5.7.1'
+    implementation 'org.springframework.security:spring-security-core:5.7.1'
+    implementation 'org.springframework.security:spring-security-config:5.7.1'
+
+    implementation project(':grpc-lib')
+
+//    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+//    implementation "io.grpc:grpc-stub:${grpcVersion}"
+
+//    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
+}
+
+//protobuf {
+//    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+//    plugins {
+//        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+//    }
+//    generateProtoTasks {
+//        all()*.plugins { grpc {} }
+//    }
+//}
+//
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs 'build/generated/source/proto/main/grpc'
+//            srcDirs 'build/generated/source/proto/main/java'
+//        }
+//    }
+//}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
