@@ -34,6 +34,11 @@ public final class OAuthToken implements Token {
     }
 
     @Override
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    @Override
     public String getRefreshToken() {
         return refreshToken;
     }

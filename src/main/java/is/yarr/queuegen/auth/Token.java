@@ -18,6 +18,13 @@ public interface Token {
     String getAccessToken();
 
     /**
+     * Sets a new access token, used for refreshing.
+     *
+     * @param accessToken The new access token
+     */
+    void setAccessToken(String accessToken);
+
+    /**
      * Gets the OAuth 2.0 refresh token, used to refresh the access token.
      *
      * @return The refresh token

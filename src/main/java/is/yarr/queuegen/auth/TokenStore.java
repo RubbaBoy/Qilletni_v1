@@ -19,13 +19,13 @@ public interface TokenStore {
     CompletableFuture<Optional<Token>> getToken(UserInfo userInfo);
 
     /**
-     * Refreshes the access token for the given {@link UserInfo}, and returns the new updated {@link Token}. If no token
-     * has been set for the user, an empty Optional is returned.
+     * Refreshes the access token for the given {@link Token}, modifying the given object. It is returned again for
+     * easy chaining of calls.
      *
-     * @param userInfo The {@link UserInfo} who owns the token to refresh
-     * @return The resulting token, if present
+     * @param token The {@link Token} to refresh
+     * @return The resulting token
      */
-    CompletableFuture<Optional<Token>> refreshToken(UserInfo userInfo);
+    CompletableFuture<Token> refreshToken(Token token);
 
     /**
      * Creates a {@link Token} for a given {@link UserInfo} with supplied access/refresh token data.

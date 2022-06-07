@@ -1,6 +1,7 @@
 package is.yarr.queuegen.auth;
 
 import is.yarr.queuegen.database.TokenRepository;
+import is.yarr.queuegen.spotify.SpotifyApiFactory;
 import is.yarr.queuegen.user.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,11 @@ public class PersistentTokenStore implements TokenStore {
     private final Executor tokenExecutor = Executors.newCachedThreadPool();
 
     private final TokenRepository tokenRepository;
+    private final SpotifyApiFactory spotifyApiFactory;
 
-    public PersistentTokenStore(TokenRepository tokenRepository) {
+    public PersistentTokenStore(TokenRepository tokenRepository, SpotifyApiFactory spotifyApiFactory) {
         this.tokenRepository = tokenRepository;
+        this.spotifyApiFactory = spotifyApiFactory;
     }
 
     @Async
@@ -34,8 +37,22 @@ public class PersistentTokenStore implements TokenStore {
     }
 
     @Override
-    public CompletableFuture<Optional<Token>> refreshToken(UserInfo userInfo) {
-        throw new UnsupportedOperationException("refreshToken"); // TODO: refreshToken
+    public CompletableFuture<Token> refreshToken(Token token) {
+        var refreshSpotifyApi = spotifyApiFactory.createRefreshApi(token.getRefreshToken());
+
+        var refreshRequest = refreshSpotifyApi.authorizationCodeRefresh().build();
+
+        return refreshRequest.executeAsync().thenApplyAsync(result -> {
+            token.setAccessToken(result.getAccessToken());
+
+            if (token instanceof OAuthToken) {
+                tokenRepository.save((OAuthToken) token);
+            } else {
+                LOGGER.error("Unable to save token type {} to a repository!", token.getClass().getName());
+            }
+
+            return token;
+        });
     }
 
     @Async
