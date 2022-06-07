@@ -60,21 +60,33 @@ public class TestEndpoint {
                 });
     }
 
-    // A client would initially request this to verify its login stuff
-    @GetMapping("/verify")
-    public ResponseEntity<?> verify(HttpServletRequest request, HttpServletResponse response) {
-        var cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            LOGGER.info("{} = {}", cookie.getName(), cookie.getValue());
-        }
-
-        var sessionIdOptional = Arrays.stream(cookies)
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        var sessionIdOptional = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equalsIgnoreCase("session"))
                 .findFirst();
 
         if (sessionIdOptional.isPresent()) {
             var sessionId = UUID.fromString(sessionIdOptional.get().getValue());
-            var userInfoOptional = sessionHandler.getUserInfo(sessionId);
+            sessionHandler.invalidateSession(sessionId);
+            return new ResponseEntity<>("Logged out of session: " + sessionId, HttpStatus.OK);
+        }
+
+        LOGGER.info("No session found!");
+
+        return new ResponseEntity<>("No session found!", HttpStatus.OK);
+    }
+
+    // A client would initially request this to verify its login stuff
+    @GetMapping("/verify")
+    public ResponseEntity<?> verify(HttpServletRequest request, HttpServletResponse response) {
+        var sessionIdOptional = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equalsIgnoreCase("session"))
+                .findFirst();
+
+        if (sessionIdOptional.isPresent()) {
+            var sessionId = UUID.fromString(sessionIdOptional.get().getValue());
+            var userInfoOptional = sessionHandler.getUserInfo(sessionId).join();
 
             if (userInfoOptional.isEmpty()) {
                 LOGGER.info("Invalid session! id: {}", sessionId);
@@ -82,7 +94,7 @@ public class TestEndpoint {
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
 
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>("Invalid session", HttpStatus.OK);
             }
 
             var userInfo = userInfoOptional.get();
@@ -94,7 +106,7 @@ public class TestEndpoint {
 
         LOGGER.info("No session found!");
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("No session found!", HttpStatus.OK);
     }
 
 }

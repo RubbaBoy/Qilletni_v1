@@ -1,9 +1,12 @@
 package is.yarr.queuegen.user;
 
+import javax.persistence.MappedSuperclass;
+
 /**
  * Contains all possible information relating to a user. This may include settings or cached data from Spotify that
  * might be useful.
  */
+@MappedSuperclass
 public interface UserInfo {
 
     /**

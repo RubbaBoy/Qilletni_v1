@@ -6,27 +6,19 @@ import java.util.UUID;
 
 /**
  * A data object to associate a session ID with a user.
- *
- * @param userInfo The {@link UserInfo}
- * @param sessionId The session ID
  */
-public record UserSession(UserInfo userInfo, UUID sessionId) {
+public interface UserSession {
+    /**
+     * Gets the unique ID of the session.
+     *
+     * @return The ID
+     */
+    UUID getSessionId();
 
     /**
      * Gets the {@link UserInfo} associated with this session.
      *
      * @return The {@link UserInfo}
      */
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    /**
-     * Gets the unique ID of the session.
-     *
-     * @return The ID
-     */
-    public UUID getSessionId() {
-        return sessionId;
-    }
+    UserInfo getUserInfo();
 }

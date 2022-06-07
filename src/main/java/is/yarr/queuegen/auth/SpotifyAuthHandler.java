@@ -5,6 +5,7 @@ import is.yarr.queuegen.user.UserStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import se.michaelthelin.spotify.enums.AuthorizationScope;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 import java.net.URI;
@@ -34,6 +35,7 @@ public class SpotifyAuthHandler implements AuthHandler {
         return spotifyApiFactory
                 .createAnonApi(REDIRECT_URI)
                 .authorizationCodeUri()
+                .scope(AuthorizationScope.USER_READ_EMAIL)
                 .build()
                 .execute();
     }
@@ -50,7 +52,10 @@ public class SpotifyAuthHandler implements AuthHandler {
     private CompletableFuture<UserSession> createUserSession(AuthorizationCodeCredentials authorizationCodeCredentials) {
         return userStore.getOrCreateUser(authorizationCodeCredentials)
                 .thenCompose(userInfo ->
-                        tokenStore.createToken(userInfo, authorizationCodeCredentials.getAccessToken(), authorizationCodeCredentials.getRefreshToken(), authorizationCodeCredentials.getExpiresIn())
-                        .thenApply(token -> sessionHandler.createSession(userInfo)));
+                        tokenStore.getToken(userInfo)
+                                .thenCompose(tokenOptional -> tokenOptional
+                                        .map(CompletableFuture::completedFuture)
+                                        .orElseGet(() -> tokenStore.createToken(userInfo, authorizationCodeCredentials.getAccessToken(), authorizationCodeCredentials.getRefreshToken(), authorizationCodeCredentials.getExpiresIn())))
+                                .thenCompose(token -> sessionHandler.createSession(userInfo)));
     }
 }

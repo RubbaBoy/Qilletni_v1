@@ -8,7 +8,7 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASS}
   jpa:
-    show-sql: true
+    show-sql: false
     generate-ddl: true
     hibernate:
       ddl-auto: update
