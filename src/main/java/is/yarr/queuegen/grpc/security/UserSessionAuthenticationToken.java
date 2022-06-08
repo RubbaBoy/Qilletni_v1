@@ -1,5 +1,6 @@
-package is.yarr.queuegen.grpc;
+package is.yarr.queuegen.grpc.security;
 
+import is.yarr.queuegen.auth.SessionHandler;
 import is.yarr.queuegen.user.UserInfo;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,17 +9,20 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 import java.util.UUID;
 
-public class SessionAuth extends AbstractAuthenticationToken {
+/**
+ * An authentication token to authenticate users found in the standard {@link SessionHandler}.
+ */
+public class UserSessionAuthenticationToken extends AbstractAuthenticationToken {
 
     private UUID sessionId;
     private final UserInfo userInfo;
 
     /**
-     * Creates an initial {@link SessionAuth} that wants to be authenticated.
+     * Creates an initial {@link UserSessionAuthenticationToken} that has yet to be authenticated.
      *
-     * @param sessionId The session ID
+     * @param sessionId The session ID of the user
      */
-    public SessionAuth(UUID sessionId) {
+    public UserSessionAuthenticationToken(UUID sessionId) {
         super(null);
         this.sessionId = sessionId;
         this.userInfo = null;
@@ -26,13 +30,14 @@ public class SessionAuth extends AbstractAuthenticationToken {
     }
 
     /**
-     * Creates an authenticated {@link SessionAuth} with the {@link UserInfo} who the {@code sessionId} belongs to.
+     * Creates an authenticated {@link UserSessionAuthenticationToken} with the {@link UserInfo} who the
+     * {@code sessionId} belongs to.
      *
      * @param sessionId The session ID of the user
      * @param userInfo The information regarding the user
      * @param authorities The authorities of the user
      */
-    SessionAuth(UUID sessionId, UserInfo userInfo, Collection<GrantedAuthority> authorities) {
+    UserSessionAuthenticationToken(UUID sessionId, UserInfo userInfo, Collection<GrantedAuthority> authorities) {
         super(authorities);
         this.sessionId = sessionId;
         this.userInfo = userInfo;
