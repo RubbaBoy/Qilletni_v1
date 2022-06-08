@@ -12,14 +12,11 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @Service
 public class PersistentTokenStore implements TokenStore {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersistentTokenStore.class);
-    private final Executor tokenExecutor = Executors.newCachedThreadPool();
 
     private final TokenRepository tokenRepository;
     private final SpotifyApiFactory spotifyApiFactory;
@@ -59,9 +56,7 @@ public class PersistentTokenStore implements TokenStore {
     @Override
     public CompletableFuture<Token> createToken(UserInfo userInfo, String accessToken, String refreshToken, int expiresIn) {
         var oauthToken = new OAuthToken(userInfo.getId(), accessToken, refreshToken, Timestamp.from(Instant.now().plusSeconds(expiresIn)));
-        LOGGER.info("Saving token: {}", oauthToken);
         tokenRepository.save(oauthToken);
-        LOGGER.info("Saving on thread: {}", Thread.currentThread().getName());
         return CompletableFuture.completedFuture(oauthToken);
     }
 }

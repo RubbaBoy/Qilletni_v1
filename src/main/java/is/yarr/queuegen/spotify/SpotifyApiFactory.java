@@ -1,5 +1,6 @@
 package is.yarr.queuegen.spotify;
 
+import is.yarr.queuegen.auth.Token;
 import is.yarr.queuegen.user.UserInfo;
 import org.springframework.lang.Nullable;
 import se.michaelthelin.spotify.SpotifyApi;
@@ -44,7 +45,7 @@ public interface SpotifyApiFactory {
      * @param userInfo The {@link UserInfo} this is for
      * @return The created {@link SpotifyApi}
      */
-    CompletableFuture<Optional<SpotifyApi>> createApi(UserInfo userInfo);
+    SpotifyApi createApi(Token token);
 
     /**
      * Creates a {@link SpotifyApi} from the given {@link AuthorizationCodeCredentials}. This is meant to be

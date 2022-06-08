@@ -1,7 +1,5 @@
 package is.yarr.queuegen.auth;
 
-import is.yarr.queuegen.user.UserInfo;
-
 import java.sql.Timestamp;
 
 /**

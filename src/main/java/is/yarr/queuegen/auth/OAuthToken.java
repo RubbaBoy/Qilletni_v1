@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity(name = "token")
 public final class OAuthToken implements Token {

@@ -41,8 +41,6 @@ public final class SpotifyUserInfo implements UserInfo {
         return avatarUrl;
     }
 
-
-
     @Override
     public String toString() {
         return "SpotifyUserInfo{" +

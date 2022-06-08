@@ -17,12 +17,6 @@ public class EnvironmentSpotifyApiFactory implements SpotifyApiFactory {
     private static final String CLIENT_ID = System.getenv("SPOTIFY_CLIENT_ID");
     private static final String CLIENT_SECRET = System.getenv("SPOTIFY_CLIENT_SECRET");
 
-    private final TokenStore tokenStore;
-
-    public EnvironmentSpotifyApiFactory(TokenStore tokenStore) {
-        this.tokenStore = tokenStore;
-    }
-
     @Override
     public SpotifyApi createAnonApi() {
         return createAnonApi(null);
@@ -47,25 +41,26 @@ public class EnvironmentSpotifyApiFactory implements SpotifyApiFactory {
     }
 
     @Override
-    public CompletableFuture<Optional<SpotifyApi>> createApi(UserInfo userInfo) {
-        return tokenStore.getToken(userInfo).thenApplyAsync(optionalToken -> {
-            if (optionalToken.isEmpty()) {
-                return Optional.empty();
-            }
+    public SpotifyApi createApi(Token token) {
+        // TODO: Clean up!
+//        return tokenStore.getToken(userInfo).thenApplyAsync(optionalToken -> {
+//            if (optionalToken.isEmpty()) {
+//                return Optional.empty();
+//            }
 
-            var token = optionalToken.get();
+//            var token = optionalToken.get();
+//
+//            if (token.isExpired()) {
+//                tokenStore.refreshToken(token).join();
+//            }
 
-            if (token.isExpired()) {
-                tokenStore.refreshToken(token).join();
-            }
-
-            return Optional.of(new SpotifyApi.Builder()
+            return new SpotifyApi.Builder()
                     .setClientId(CLIENT_ID)
                     .setClientSecret(CLIENT_SECRET)
                     .setAccessToken(token.getAccessToken())
                     .setRefreshToken(token.getRefreshToken())
-                    .build());
-        });
+                    .build();
+//        });
     }
 
     @Override
