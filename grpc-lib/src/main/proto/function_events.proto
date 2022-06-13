@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.queuegen.grpc.gen.events.function";
+
+service Function {
+  rpc Create(FunctionCreateEvent) returns (CreateComponentResponse);
+  rpc ChangeChildren(FunctionChangeChildrenEvent) returns (EmptyResponse);
+  rpc ChangeName(FunctionNameChangeEvent) returns (EmptyResponse);
+}
+
+message FunctionCreateEvent {}
+
+message FunctionChangeChildrenEvent {
+  ModifyEvent modify = 1;
+  repeated bytes children = 2;
+}
+
+message FunctionNameChangeEvent {
+  ModifyEvent modify = 1;
+  string name = 2;
+}

@@ -1,10 +1,10 @@
 package is.yarr.queuegen.grpc;
 
 import io.grpc.stub.StreamObserver;
+import is.yarr.queuegen.grpc.gen.HelloReply;
+import is.yarr.queuegen.grpc.gen.HelloRequest;
+import is.yarr.queuegen.grpc.gen.SimpleGrpc;
 import is.yarr.queuegen.grpc.security.UserSessionSecurityContext;
-import net.devh.boot.grpc.examples.lib.HelloReply;
-import net.devh.boot.grpc.examples.lib.HelloRequest;
-import net.devh.boot.grpc.examples.lib.SimpleGrpc;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
