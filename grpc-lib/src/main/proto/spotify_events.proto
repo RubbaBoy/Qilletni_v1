@@ -14,7 +14,6 @@ service Spotify {
   rpc ChangeYearRange(SpotifyYearRangeChangeEvent) returns (EmptyResponse);
   rpc ChangeYear(SpotifyYearChangeEvent) returns (EmptyResponse);
   rpc ChangeGenre(SpotifyGenreChangeEvent) returns (EmptyResponse);
-  rpc ChangeTags(SpotifyTagsChangeEvent) returns (EmptyResponse);
 }
 
 enum SpotifyCollectionType {
@@ -22,11 +21,6 @@ enum SpotifyCollectionType {
   ARTIST = 1;
   ALBUM = 2;
   SEARCH = 3;
-}
-
-enum SpotifyTag {
-  NEW = 0;
-  HIPSTER = 1;
 }
 
 message YearRange {
@@ -69,9 +63,4 @@ message SpotifyYearChangeEvent {
 message SpotifyGenreChangeEvent {
   ModifyEvent modify = 1;
   optional string genre = 2;
-}
-
-message SpotifyTagsChangeEvent {
-  ModifyEvent modify = 1;
-  repeated SpotifyTag tags = 2;
 }
