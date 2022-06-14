@@ -3,7 +3,7 @@ syntax = "proto3";
 import "events.proto";
 
 option java_multiple_files = true;
-option java_package = "is.yarr.queuegen.grpc.gen.events.function";
+option java_package = "is.yarr.qilletni.grpc.gen.events.function";
 
 service Function {
   rpc Create(FunctionCreateEvent) returns (CreateComponentResponse);

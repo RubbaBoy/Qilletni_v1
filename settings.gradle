@@ -1,2 +1,2 @@
-rootProject.name = 'QueueGen'
+rootProject.name = 'Qilletni'
 include "grpc-lib"

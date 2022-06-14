@@ -3,7 +3,7 @@ syntax = "proto3";
 import "events.proto";
 
 option java_multiple_files = true;
-option java_package = "is.yarr.queuegen.grpc.gen.events.spotify";
+option java_package = "is.yarr.qilletni.grpc.gen.events.spotify";
 
 service Spotify {
   rpc Create(SpotifyCreateEvent) returns (CreateComponentResponse);

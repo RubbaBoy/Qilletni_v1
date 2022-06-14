@@ -31,7 +31,7 @@ plugins {
     id 'java'
 }
 
-group = 'is.yarr.queuegen'
+group = 'is.yarr.qilletni'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
