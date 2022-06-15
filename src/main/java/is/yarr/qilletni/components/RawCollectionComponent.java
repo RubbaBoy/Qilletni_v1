@@ -1,20 +1,32 @@
 package is.yarr.qilletni.components;
 
+import is.yarr.qilletni.database.converters.SongIdListConverter;
 import is.yarr.qilletni.music.SongId;
 
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import java.util.List;
 import java.util.UUID;
 
+/**
+ * A component to play a set list of songs.
+ */
+@Entity(name = "raw_collection_component")
 public class RawCollectionComponent extends Component {
 
-    private boolean isSequential;
-    private SongId[] songs;
+    private boolean isSequential = true;
+
+    @Convert(converter = SongIdListConverter.class)
+    private List<SongId> songs;
+
+    protected RawCollectionComponent() {}
 
     /**
      * Creates a base {@link Component} with a given instance ID.
      *
      * @param instanceId The instance ID
      */
-    protected RawCollectionComponent(UUID instanceId) {
+    public RawCollectionComponent(UUID instanceId) {
         super(instanceId);
     }
 
@@ -47,7 +59,7 @@ public class RawCollectionComponent extends Component {
      * @return The songs in the collection
      */
     public SongId[] getSongs() {
-        return songs;
+        return songs.toArray(SongId[]::new);
     }
 
     /**
@@ -56,6 +68,6 @@ public class RawCollectionComponent extends Component {
      * @param songs The songs to set
      */
     public void setSongs(SongId[] songs) {
-        this.songs = songs;
+        this.songs = List.of(songs);
     }
 }

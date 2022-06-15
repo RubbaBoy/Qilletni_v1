@@ -1,21 +1,29 @@
 package is.yarr.qilletni.components;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * A component that contains a collection of children that will be iterated through and invoked upon generation.
  */
+@Entity(name = "function_component")
 public class FunctionComponent extends Component {
 
     private String name;
-    private UUID[] children;
+
+    @ElementCollection
+    private List<UUID> children;
+
+    protected FunctionComponent() {}
 
     /**
      * Creates a base {@link Component} with a given instance ID.
      *
      * @param instanceId The instance ID
      */
-    protected FunctionComponent(UUID instanceId) {
+    public FunctionComponent(UUID instanceId) {
         super(instanceId);
     }
 
@@ -48,7 +56,7 @@ public class FunctionComponent extends Component {
      * @return The childrens' IDs
      */
     public UUID[] getChildren() {
-        return children;
+        return children.toArray(UUID[]::new);
     }
 
     /**
@@ -57,6 +65,6 @@ public class FunctionComponent extends Component {
      * @param children The childrens' IDs
      */
     public void setChildren(UUID[] children) {
-        this.children = children;
+        this.children = List.of(children);
     }
 }

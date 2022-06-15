@@ -1,15 +1,24 @@
 package is.yarr.qilletni.components;
 
+import is.yarr.qilletni.database.converters.SongIdConverter;
 import is.yarr.qilletni.music.SongId;
 
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import java.util.UUID;
 
 /**
  * A component that allows the queuing of an individual (client-specified) song once.
  */
+@Entity(name = "song_component")
 public class SongComponent extends Component {
 
+    @OneToOne
+    @Convert(converter = SongIdConverter.class, attributeName = "id")
     private SongId songId;
+
+    protected SongComponent() {}
 
     /**
      * Creates a {@link SongComponent} with a given instance ID.

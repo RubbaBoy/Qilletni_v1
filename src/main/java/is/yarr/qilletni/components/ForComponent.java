@@ -1,24 +1,31 @@
 package is.yarr.qilletni.components;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Entity(name = "for_component")
 public class ForComponent extends Component {
 
-    private UUID[] children;
+    @ElementCollection
+    private List<UUID> children;
     private LoopStrategy loopStrategy = LoopStrategy.NONE;
     private Integer iterations;
     private Integer duration;
     private Date absTime;
+
+    protected ForComponent() {}
 
     /**
      * Creates a base {@link Component} with a given instance ID.
      *
      * @param instanceId The instance ID
      */
-    protected ForComponent(UUID instanceId) {
+    public ForComponent(UUID instanceId) {
         super(instanceId);
     }
 
@@ -33,7 +40,7 @@ public class ForComponent extends Component {
      * @return The childrens' IDs
      */
     public UUID[] getChildren() {
-        return children;
+        return children.toArray(UUID[]::new);
     }
 
     /**
@@ -42,7 +49,7 @@ public class ForComponent extends Component {
      * @param children The childrens' IDs
      */
     public void setChildren(UUID[] children) {
-        this.children = children;
+        this.children = List.of(children);
     }
 
     /**

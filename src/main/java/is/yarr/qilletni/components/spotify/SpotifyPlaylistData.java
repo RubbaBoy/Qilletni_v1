@@ -1,12 +1,18 @@
 package is.yarr.qilletni.components.spotify;
 
+import is.yarr.qilletni.database.converters.PlaylistIdConverter;
 import is.yarr.qilletni.music.PlaylistId;
+
+import javax.persistence.Convert;
+import javax.persistence.Entity;
 
 /**
  * Stores data for playing from a Spotify playlist.
  */
-public class SpotifyPlaylistData implements SpotifyCollectionData {
+@Entity(name = "spotify_playlist_data")
+public class SpotifyPlaylistData extends SpotifyCollectionData {
 
+    @Convert(converter = PlaylistIdConverter.class)
     private PlaylistId playlistId;
 
     @Override

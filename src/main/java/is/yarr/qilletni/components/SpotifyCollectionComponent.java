@@ -3,21 +3,34 @@ package is.yarr.qilletni.components;
 import is.yarr.qilletni.components.spotify.SpotifyCollectionData;
 import is.yarr.qilletni.components.spotify.SpotifyCollectionType;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * A component to play from different Spotify sources.
+ */
+@Entity(name = "spotify_component")
 public class SpotifyCollectionComponent extends Component {
 
-    private boolean isSequential;
+    private boolean isSequential = true;
+
+    @Column(name = "iteration_limit")
     private Integer limit;
+
+    @OneToOne
     private SpotifyCollectionData collectionData;
+
+    protected SpotifyCollectionComponent() {}
 
     /**
      * Creates a {@link SpotifyCollectionComponent} with a given instance ID.
      *
      * @param instanceId The instance ID
      */
-    protected SpotifyCollectionComponent(UUID instanceId) {
+    public SpotifyCollectionComponent(UUID instanceId) {
         super(instanceId);
     }
 

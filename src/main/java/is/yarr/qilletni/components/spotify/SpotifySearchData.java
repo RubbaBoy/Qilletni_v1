@@ -1,15 +1,22 @@
 package is.yarr.qilletni.components.spotify;
 
+import is.yarr.qilletni.database.converters.YearChooserConverter;
+
+import javax.persistence.Convert;
+import javax.persistence.Entity;
 import java.util.Optional;
 
 /**
  * Stores data for playing from a Spotify search query.
  */
-public class SpotifySearchData implements SpotifyCollectionData {
+@Entity(name = "spotify_search_data")
+public class SpotifySearchData extends SpotifyCollectionData {
 
     private String searchData;
-    private YearChooser yearChooser;
     private String genre;
+
+    @Convert(converter = YearChooserConverter.class)
+    private YearChooser yearChooser;
 
     @Override
     public SpotifyCollectionType getCollectionType() {
