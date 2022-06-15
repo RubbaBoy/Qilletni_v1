@@ -1,50 +1,21 @@
 package is.yarr.qilletni.music;
 
-import javax.persistence.DiscriminatorValue;
-import java.util.Objects;
+import org.modelmapper.internal.util.Assert;
 
 /**
  * A {@link SongId} implementation for the Spotify API.
  * @see <a href="https://developer.spotify.com/documentation/web-api/">Spotify Documentation</a>
  *
  */
-//@DiscriminatorValue("spotify")
-//@Entity
-public final class SpotifySongId extends SongId {
-    private String uri;
-
-    public SpotifySongId() {}
+public record SpotifySongId(String id, String uri) implements SongId {
 
     /**
-     * @param id The Spotify ID string of the song
-     * @param uri The Spotify URI of the song
+     * Creates a {@link SpotifySongId} with a given ID, implicitly setting the uri as "spotify:track:id-param".
+     *
+     * @param id The song ID
      */
-    public SpotifySongId(String id, String uri) {
-        this.id = id;
-        this.uri = uri;
+    public SpotifySongId(String id) {
+        this(id, "spotify:track:" + id);
+        Assert.notNull(id, "id must not be null");
     }
-
-    public String uri() {return uri;}
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (SpotifySongId) obj;
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.uri, that.uri);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, uri);
-    }
-
-    @Override
-    public String toString() {
-        return "SpotifySongId[" +
-                "id=" + id + ", " +
-                "uri=" + uri + ']';
-    }
-
 }

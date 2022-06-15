@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.persistence.Converter;
 
 @Converter
-public class PlaylistIdConverter extends NullAwareAttributeConverter<PlaylistId, String> {
+public class SpotifyPlaylistIdConverter extends NullAwareAttributeConverter<PlaylistId, String> {
 
     @Override
     public String convertNonNullToDatabaseColumn(@Nonnull PlaylistId attribute) {
@@ -16,7 +16,6 @@ public class PlaylistIdConverter extends NullAwareAttributeConverter<PlaylistId,
 
     @Override
     public PlaylistId convertNonNullToEntityAttribute(@Nonnull String id) {
-        // TODO: Is the format spotify:playlist:id?
-        return new SpotifyPlaylistId(id, "spotify:playlist:" + id);
+        return new SpotifyPlaylistId(id);
     }
 }

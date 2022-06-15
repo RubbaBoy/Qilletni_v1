@@ -1,6 +1,6 @@
 package is.yarr.qilletni.components;
 
-import is.yarr.qilletni.database.converters.SongIdConverter;
+import is.yarr.qilletni.database.converters.SpotifySongIdConverter;
 import is.yarr.qilletni.music.SongId;
 
 import javax.persistence.Convert;
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SongComponent extends Component {
 
     @OneToOne
-    @Convert(converter = SongIdConverter.class, attributeName = "id")
+    @Convert(converter = SpotifySongIdConverter.class, attributeName = "id")
     private SongId songId;
 
     protected SongComponent() {}

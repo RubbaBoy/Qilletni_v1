@@ -1,6 +1,6 @@
 package is.yarr.qilletni.components.spotify;
 
-import is.yarr.qilletni.database.converters.AlbumIdConverter;
+import is.yarr.qilletni.database.converters.SpotifyAlbumIdConverter;
 import is.yarr.qilletni.music.AlbumId;
 
 import javax.persistence.Convert;
@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Entity(name = "spotify_album_data")
 public class SpotifyAlbumData extends SpotifyCollectionData {
 
-    @Convert(converter = AlbumIdConverter.class)
+    @Convert(converter = SpotifyAlbumIdConverter.class)
     private AlbumId albumId;
 
     @Override

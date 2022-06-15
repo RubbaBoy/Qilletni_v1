@@ -1,6 +1,7 @@
 package is.yarr.qilletni.database.converters;
 
 import is.yarr.qilletni.music.SongId;
+import is.yarr.qilletni.music.SpotifySongId;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Converter
-public class SongIdListConverter implements AttributeConverter<List<SongId>, String> {
+public class SpotifySongIdListConverter implements AttributeConverter<List<SongId>, String> {
 
     @Override
     public String convertToDatabaseColumn(List<SongId> attribute) {
@@ -28,7 +29,8 @@ public class SongIdListConverter implements AttributeConverter<List<SongId>, Str
         }
 
         return Arrays.stream(dbData.split(","))
-                .map(SongIdConverter::songIdFromIdString)
+                .map(SpotifySongId::new)
+                .map(SongId.class::cast)
                 .toList();
     }
 }

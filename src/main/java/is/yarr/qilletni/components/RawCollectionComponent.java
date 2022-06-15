@@ -1,6 +1,6 @@
 package is.yarr.qilletni.components;
 
-import is.yarr.qilletni.database.converters.SongIdListConverter;
+import is.yarr.qilletni.database.converters.SpotifySongIdListConverter;
 import is.yarr.qilletni.music.SongId;
 
 import javax.persistence.Convert;
@@ -16,7 +16,7 @@ public class RawCollectionComponent extends Component {
 
     private boolean isSequential = true;
 
-    @Convert(converter = SongIdListConverter.class)
+    @Convert(converter = SpotifySongIdListConverter.class)
     private List<SongId> songs;
 
     protected RawCollectionComponent() {}
