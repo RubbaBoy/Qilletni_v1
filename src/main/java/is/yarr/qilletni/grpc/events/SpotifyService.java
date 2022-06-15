@@ -9,7 +9,6 @@ import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyGenreChangeEvent;
 import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyGrpc;
 import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyLimitChangeEvent;
 import is.yarr.qilletni.grpc.gen.events.spotify.SpotifySequentialChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyTagsChangeEvent;
 import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyTypeChangeEvent;
 import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyYearChangeEvent;
 import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyYearRangeChangeEvent;
@@ -65,11 +64,5 @@ public class SpotifyService extends SpotifyGrpc.SpotifyImplBase {
     @Secured({GENERAL})
     public void changeGenre(SpotifyGenreChangeEvent request, StreamObserver<EmptyResponse> responseObserver) {
         // TODO: changeGenre
-    }
-
-    @Override
-    @Secured({GENERAL})
-    public void changeTags(SpotifyTagsChangeEvent request, StreamObserver<EmptyResponse> responseObserver) {
-        // TODO: changeTags
     }
 }
