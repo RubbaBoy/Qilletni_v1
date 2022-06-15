@@ -1,18 +1,26 @@
 package is.yarr.qilletni.components.spotify;
 
-import is.yarr.qilletni.components.SpotifyCollectionComponent;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
-/**
- * Stores data relevant to what data is being fetched from a {@link SpotifyCollectionComponent}.
- */
-public interface SpotifyCollectionData {
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class SpotifyCollectionData {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
 
     /**
      * Gets the {@link SpotifyCollectionType} of the data, identifying what kind of data it is.
      *
      * @return The {@link SpotifyCollectionType}
      */
-    SpotifyCollectionType getCollectionType();
+    public abstract SpotifyCollectionType getCollectionType();
 
     /**
      * Checks if all required fields are non-null and valid. If this returns {@code false}, do not expect anything to
@@ -20,13 +28,13 @@ public interface SpotifyCollectionData {
      *
      * @return If the data is ready to be used
      */
-    boolean isInitialized();
+    public abstract boolean isInitialized();
 
     /**
      * Returns if shuffling is supported on the current collection.
      *
      * @return If shuffling is supported
      */
-    boolean isShuffleSupported();
+    public abstract boolean isShuffleSupported();
 
 }

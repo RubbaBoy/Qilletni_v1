@@ -1,16 +1,27 @@
 package is.yarr.qilletni.components;
 
+import is.yarr.qilletni.database.converters.ColorConverter;
+
 import javax.annotation.Nullable;
+import javax.persistence.Convert;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.awt.Color;
 import java.util.UUID;
 
 /**
  * The base class of displayable objects that control the flow of the created queue.
  */
+@MappedSuperclass
 public abstract class Component {
 
-    private final UUID instanceId;
+    @Id
+    private UUID instanceId;
+
+    @Convert(converter = ColorConverter.class)
     private Color color;
+
+    Component() {}
 
     /**
      * Creates a base {@link Component} with a given instance ID.

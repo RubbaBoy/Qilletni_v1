@@ -1,21 +1,30 @@
 package is.yarr.qilletni.components;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * A component to play from different LastFm sources.
+ */
+@Entity(name = "lastfm_component")
 public class LastFmCollectionComponent extends Component {
 
     private boolean isSequential = true;
-    private Integer limit;
     private LastFmCollectionType collectionType;
 
+    @Column(name = "iteration_limit")
+    private Integer limit;
+
+    protected LastFmCollectionComponent() {}
 
     /**
      * Creates a {@link LastFmCollectionComponent} with a given instance ID.
      *
      * @param instanceId The instance ID
      */
-    protected LastFmCollectionComponent(UUID instanceId) {
+    public LastFmCollectionComponent(UUID instanceId) {
         super(instanceId);
     }
 
