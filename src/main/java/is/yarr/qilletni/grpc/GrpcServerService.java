@@ -21,7 +21,7 @@ public class GrpcServerService extends SimpleGrpc.SimpleImplBase {
     @Secured({GENERAL})
     public void sayHello(final HelloRequest req, final StreamObserver<HelloReply> responseObserver) {
         var auth = UserSessionSecurityContext.getAuthToken();
-        LOGGER.info("auth = {}", auth);
+        LOGGER.debug("auth = {}", auth);
 
         final HelloReply reply = HelloReply.newBuilder().setMessage("Hello ==> " + req.getName() + " (Hey, " + auth.getPrincipal().getName() + "!)").build();
         responseObserver.onNext(reply);
