@@ -5,7 +5,6 @@ import is.yarr.qilletni.music.SongId;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import java.util.UUID;
 
 /**
@@ -14,8 +13,7 @@ import java.util.UUID;
 @Entity(name = "song_component")
 public class SongComponent extends Component {
 
-    @OneToOne
-    @Convert(converter = SpotifySongIdConverter.class, attributeName = "id")
+    @Convert(converter = SpotifySongIdConverter.class)
     private SongId songId;
 
     protected SongComponent() {}

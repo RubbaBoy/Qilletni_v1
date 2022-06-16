@@ -40,7 +40,6 @@ message CreateComponentResponse {
   string component_id = 2;
 }
 
-
 message ModifyEvent {
   string component_id = 1;
 }
