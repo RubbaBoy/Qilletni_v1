@@ -10,27 +10,27 @@ public interface Song {
      *
      * @return The song's ID
      */
-    String id();
+    String getId();
 
     /**
      * Gets the song's name.
      *
      * @return The song's name
      */
-    String name();
+    String getName();
 
     /**
      * Gets the primary artist of the song.
      *
      * @return The artist of the song
      */
-    String artist();
+    String getArtist();
 
     /**
      * Gets the direct artwork URL of the song.
      *
      * @return The artwork URL
      */
-    String artworkUrl();
+    String getArtworkUrl();
 
 }
