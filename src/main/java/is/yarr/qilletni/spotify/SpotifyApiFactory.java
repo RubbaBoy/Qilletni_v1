@@ -14,11 +14,12 @@ import java.net.URI;
 public interface SpotifyApiFactory {
 
     /**
-     * Creates a {@link SpotifyApi} without any user tokens tied to it.
+     * Creates a {@link SpotifyApi} with client credentials.
+     * @see <a href="https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/">Client Credentials Flow</a>
      *
      * @return The created {@link SpotifyApi}
      */
-    SpotifyApi createAnonApi();
+    SpotifyApi createClientCredentialsApi();
 
     /**
      * Returns a {@link SpotifyApi} to be used to refresh access tokens.
@@ -29,12 +30,13 @@ public interface SpotifyApiFactory {
     SpotifyApi createRefreshApi(String refreshToken);
 
     /**
-     * Creates a {@link SpotifyApi} without any user tokens tied to it, with the (optional) given redirect URI.
+     * Creates a {@link SpotifyApi} without any user tokens tied to it, with the given redirect URI. This should only
+     * be used for authenticating a user.
      *
      * @param redirectUri The redirect URI to include, if any
      * @return The created {@link SpotifyApi}
      */
-    SpotifyApi createAnonApi(@Nullable URI redirectUri);
+    SpotifyApi createRedirectApi(@Nullable URI redirectUri);
 
     /**
      * Creates a {@link SpotifyApi} from a {@link UserInfo}. This is meant to be short-lived, and will

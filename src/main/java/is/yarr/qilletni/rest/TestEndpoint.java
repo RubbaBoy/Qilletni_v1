@@ -2,9 +2,13 @@ package is.yarr.qilletni.rest;
 
 import is.yarr.qilletni.auth.AuthHandler;
 import is.yarr.qilletni.auth.SessionHandler;
+import is.yarr.qilletni.content.SongCache;
+import is.yarr.qilletni.music.SpotifySongId;
 import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
@@ -23,6 +27,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This class will be removed when this starts getting more production-ready, do not let the code quality or
+ * functionality of this class reflect on the quality the rest of the project.
+ */
 @RestController
 public class TestEndpoint {
 
@@ -30,10 +38,18 @@ public class TestEndpoint {
 
     private final AuthHandler authHandler;
     private final SessionHandler sessionHandler;
+    private final SongCache songCache;
 
-    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler) {
+    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache) {
         this.authHandler = authHandler;
         this.sessionHandler = sessionHandler;
+        this.songCache = songCache;
+    }
+
+    @GetMapping("/demo")
+    public ResponseEntity<?> demo(@Param("id") String id) {
+        var song = songCache.getSong(new SpotifySongId(id)).join();
+        return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
     @GetMapping("/login")

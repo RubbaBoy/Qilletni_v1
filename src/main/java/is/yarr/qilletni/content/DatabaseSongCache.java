@@ -3,6 +3,8 @@ package is.yarr.qilletni.content;
 import is.yarr.qilletni.database.repositories.external.SongRepository;
 import is.yarr.qilletni.music.Song;
 import is.yarr.qilletni.music.SongId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class DatabaseSongCache implements SongCache {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseSongCache.class);
 
     private final SongRetriever songRetriever;
     private final SongRepository songRepository;
@@ -25,6 +29,7 @@ public class DatabaseSongCache implements SongCache {
     @Async
     @Override
     public CompletableFuture<Song> getSong(SongId songId) {
+        LOGGER.debug("Getting song {}", songId.id());
         var songOptional = songRepository.findById(songId);
 
         return songOptional.map(CompletableFuture::completedFuture)
