@@ -6,6 +6,8 @@ import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.Image;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
+import static is.yarr.qilletni.utility.SpotifyObjectUtils.getPrimaryImage;
+
 /**
  * A factory to create {@link Song} objects from any necessary source objects.
  */
@@ -18,7 +20,7 @@ public class SongFactory {
      * @return The created {@link Song}
      */
     public static Song createSong(Track track) {
-        return new SpotifySong(track.getId(), track.getName(), getPrimaryArtist(track), getPrimaryImage(track));
+        return new SpotifySong(track.getId(), track.getName(), getPrimaryArtist(track), getPrimaryImage(track.getAlbum().getImages()));
     }
 
     /**
@@ -35,20 +37,4 @@ public class SongFactory {
 
         return artists[0].getName();
     }
-
-    /**
-     * Gets the largest album image from the given {@link Track}, or an empty string.
-     *
-     * @param track The track to get the album art from
-     * @return The largest image's URL
-     */
-    private static String getPrimaryImage(Track track) {
-        Image[] albumImages = track.getAlbum().getImages();
-        if (albumImages.length == 0) {
-            return "";
-        }
-
-        return albumImages[0].getUrl();
-    }
-
 }
