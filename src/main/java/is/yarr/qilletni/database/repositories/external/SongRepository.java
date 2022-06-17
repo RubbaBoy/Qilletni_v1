@@ -50,10 +50,4 @@ public class SongRepository {
 
         return spotifySongRepository.save((SpotifySong) song);
     }
-
-    static class UnsupportedTypeException extends RuntimeException {
-        UnsupportedTypeException(Object type) {
-            super("Operation is unsupported for a class of type: " + type.getClass().getTypeName());
-        }
-    }
 }

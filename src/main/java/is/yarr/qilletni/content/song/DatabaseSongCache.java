@@ -1,4 +1,4 @@
-package is.yarr.qilletni.content;
+package is.yarr.qilletni.content.song;
 
 import is.yarr.qilletni.database.repositories.external.SongRepository;
 import is.yarr.qilletni.music.Song;
@@ -6,12 +6,14 @@ import is.yarr.qilletni.music.SongId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 public class DatabaseSongCache implements SongCache {
@@ -53,5 +55,27 @@ public class DatabaseSongCache implements SongCache {
                     returningSongs.addAll(retrievedSongs);
                     return Collections.unmodifiableList(returningSongs);
                 });
+    }
+
+    @Override
+    public CompletableFuture<List<Song>> getSongsOrdered(List<SongId> songIds) {
+        return getSongs(songIds)
+                .thenApply(songs -> songIds.stream()
+                        .map(songId -> findById(songId, songs))
+                        .toList());
+    }
+
+    /**
+     * Finds a {@link Song} in the given list of {@link Song}s by its ID. If it is not found, an exception is thrown.
+     *
+     * @param songId The ID of the song to find
+     * @param songs  The song list to get from
+     * @return The found song
+     */
+    private Song findById(SongId songId, List<Song> songs) {
+        return songs.stream()
+                .filter(song -> song.getId().equals(songId.id()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Song list and ID mismatch!"));
     }
 }

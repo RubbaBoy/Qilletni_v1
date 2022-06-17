@@ -2,12 +2,13 @@ package is.yarr.qilletni.rest;
 
 import is.yarr.qilletni.auth.AuthHandler;
 import is.yarr.qilletni.auth.SessionHandler;
-import is.yarr.qilletni.content.SongCache;
+import is.yarr.qilletni.content.playlist.PlaylistCache;
+import is.yarr.qilletni.content.song.SongCache;
+import is.yarr.qilletni.music.SpotifyPlaylistId;
 import is.yarr.qilletni.music.SpotifySongId;
 import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,16 +40,30 @@ public class TestEndpoint {
     private final AuthHandler authHandler;
     private final SessionHandler sessionHandler;
     private final SongCache songCache;
+    private final PlaylistCache playlistCache;
 
-    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache) {
+    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache, PlaylistCache playlistCache) {
         this.authHandler = authHandler;
         this.sessionHandler = sessionHandler;
         this.songCache = songCache;
+        this.playlistCache = playlistCache;
     }
 
     @GetMapping("/demo")
     public ResponseEntity<?> demo(@Param("id") String id) {
         var song = songCache.getSong(new SpotifySongId(id)).join();
+        return new ResponseEntity<>(song, HttpStatus.OK);
+    }
+
+    @GetMapping("/playlist")
+    public ResponseEntity<?> playlist(@Param("id") String id) {
+        var song = playlistCache.getPlaylist(new SpotifyPlaylistId(id)).join();
+        return new ResponseEntity<>(song, HttpStatus.OK);
+    }
+
+    @GetMapping("/playlist_tracks")
+    public ResponseEntity<?> playlist(@Param("id") String id, @Param("offset") int offset, @Param("limit") int limit) {
+        var song = playlistCache.getPlaylistSongs(new SpotifyPlaylistId(id), offset, limit).join();
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 

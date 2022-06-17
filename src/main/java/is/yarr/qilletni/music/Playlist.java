@@ -10,42 +10,42 @@ public interface Playlist {
      *
      * @return The playlist's ID
      */
-    String id();
+    String getId();
 
     /**
      * Gets the playlist's name.
      *
      * @return The playlist's name
      */
-    String name();
+    String getName();
 
     /**
      * Gets the owner of the playlist.
      *
      * @return The owner of the playlist
      */
-    String owner();
+    String getOwner();
 
     /**
      * Gets the direct artwork URL of the song.
      *
      * @return The artwork URL
      */
-    String artworkUrl();
+    String getArtworkUrl();
 
     /**
      * Gets the followers of the playlist.
      *
      * @return The playlist's followers
      */
-    int followers();
+    int getFollowers();
 
     /**
      * Gets the description of the playlist.
      *
      * @return The playlist's description
      */
-    String description();
+    String getDescription();
 
     /**
      * Gets if the playlist is visible to the public.
