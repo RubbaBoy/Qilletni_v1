@@ -1,4 +1,4 @@
-package is.yarr.qilletni.content;
+package is.yarr.qilletni.content.song;
 
 import is.yarr.qilletni.database.repositories.external.SongRepository;
 import is.yarr.qilletni.music.Song;

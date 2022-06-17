@@ -2,12 +2,11 @@ package is.yarr.qilletni.rest;
 
 import is.yarr.qilletni.auth.AuthHandler;
 import is.yarr.qilletni.auth.SessionHandler;
-import is.yarr.qilletni.content.SongCache;
+import is.yarr.qilletni.content.song.SongCache;
 import is.yarr.qilletni.music.SpotifySongId;
 import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
