@@ -45,7 +45,7 @@ public class DatabasePlaylistCache implements PlaylistCache {
      */
     @Override
     public CompletableFuture<PagedSongs> getPlaylistSongs(PlaylistId playlistId, int offset, int limit) {
-        LOGGER.debug("Fetching playlist songs: {} (offset = {}, limit = {})", playlistId.id(), offset, limit);
+        LOGGER.debug("Getting playlist songs: {} (offset = {}, limit = {})", playlistId.id(), offset, limit);
 
         return playlistRetriever.fetchPlaylistSongs(playlistId, offset, limit);
     }

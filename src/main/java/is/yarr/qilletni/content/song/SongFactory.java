@@ -2,11 +2,10 @@ package is.yarr.qilletni.content.song;
 
 import is.yarr.qilletni.music.Song;
 import is.yarr.qilletni.music.SpotifySong;
+import is.yarr.qilletni.utility.SpotifyObjectUtils;
 import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.Image;
 import se.michaelthelin.spotify.model_objects.specification.Track;
-
-import static is.yarr.qilletni.utility.SpotifyObjectUtils.getPrimaryImage;
 
 /**
  * A factory to create {@link Song} objects from any necessary source objects.
@@ -20,21 +19,9 @@ public class SongFactory {
      * @return The created {@link Song}
      */
     public static Song createSong(Track track) {
-        return new SpotifySong(track.getId(), track.getName(), getPrimaryArtist(track), getPrimaryImage(track.getAlbum().getImages()));
-    }
-
-    /**
-     * Gets the first artist's name from the given {@link Track}, or a placeholder "-" string.
-     *
-     * @param track The track to get the artist from
-     * @return The first artist's name
-     */
-    private static String getPrimaryArtist(Track track) {
-        ArtistSimplified[] artists = track.getArtists();
-        if (artists.length == 0) {
-            return "-";
-        }
-
-        return artists[0].getName();
+        return new SpotifySong(track.getId(),
+                track.getName(),
+                SpotifyObjectUtils.getPrimaryArtist(track),
+                SpotifyObjectUtils.getPrimaryImage(track.getAlbum().getImages()));
     }
 }

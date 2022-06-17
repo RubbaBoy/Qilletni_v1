@@ -2,12 +2,8 @@ package is.yarr.qilletni.database.repositories.external;
 
 import is.yarr.qilletni.music.Playlist;
 import is.yarr.qilletni.music.PlaylistId;
-import is.yarr.qilletni.music.Song;
-import is.yarr.qilletni.music.SongId;
 import is.yarr.qilletni.music.SpotifyPlaylist;
 import is.yarr.qilletni.music.SpotifyPlaylistId;
-import is.yarr.qilletni.music.SpotifySong;
-import is.yarr.qilletni.music.SpotifySongId;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

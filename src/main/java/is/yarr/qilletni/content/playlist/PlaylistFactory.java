@@ -2,8 +2,7 @@ package is.yarr.qilletni.content.playlist;
 
 import is.yarr.qilletni.music.Playlist;
 import is.yarr.qilletni.music.SpotifyPlaylist;
-
-import static is.yarr.qilletni.utility.SpotifyObjectUtils.getPrimaryImage;
+import is.yarr.qilletni.utility.SpotifyObjectUtils;
 
 /**
  * A factory to create {@link is.yarr.qilletni.music.Playlist} objects from any necessary source objects.
@@ -20,7 +19,7 @@ public class PlaylistFactory {
         return new SpotifyPlaylist(spotifyPlaylist.getId(),
                 spotifyPlaylist.getName(),
                 spotifyPlaylist.getOwner().getDisplayName(),
-                getPrimaryImage(spotifyPlaylist.getImages()),
+                SpotifyObjectUtils.getPrimaryImage(spotifyPlaylist.getImages()),
                 spotifyPlaylist.getFollowers().getTotal(),
                 spotifyPlaylist.getDescription(),
                 spotifyPlaylist.getIsPublicAccess());
