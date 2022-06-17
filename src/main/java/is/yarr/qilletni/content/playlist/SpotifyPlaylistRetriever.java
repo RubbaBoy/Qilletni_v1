@@ -3,7 +3,6 @@ package is.yarr.qilletni.content.playlist;
 import is.yarr.qilletni.content.song.SongFactory;
 import is.yarr.qilletni.music.Playlist;
 import is.yarr.qilletni.music.PlaylistId;
-import is.yarr.qilletni.music.SpotifySongId;
 import is.yarr.qilletni.spotify.SpotifyApiFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistsItemsRequest
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 public class SpotifyPlaylistRetriever implements PlaylistRetriever {
@@ -59,7 +57,7 @@ public class SpotifyPlaylistRetriever implements PlaylistRetriever {
                             .map(SongFactory::createSong)
                             .toList();
 
-                    return new SpotifyPagedSongs(limit, offset, songs);
+                    return new SpotifyPagedSongs(limit, offset, paging.getTotal(), paging.getNext() != null, songs);
                 });
     }
 }

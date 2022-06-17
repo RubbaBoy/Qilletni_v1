@@ -31,13 +31,13 @@ public class PlaylistRepository {
      * @return The found playlist, if any
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
-    public Optional<Song> findById(PlaylistId playlistId) {
+    public Optional<Playlist> findById(PlaylistId playlistId) {
         if (!(playlistId instanceof SpotifyPlaylistId)) {
             throw new UnsupportedTypeException(playlistId);
         }
 
         return spotifyPlaylistRepository.findById(playlistId.id())
-                .map(Song.class::cast);
+                .map(Playlist.class::cast);
     }
 
     /**

@@ -85,5 +85,4 @@ public class SpotifyPlaylist implements Playlist {
                 "description=" + description + ", " +
                 "isPublic=" + isPublic + ']';
     }
-
 }
