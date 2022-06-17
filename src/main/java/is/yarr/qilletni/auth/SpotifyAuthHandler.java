@@ -33,7 +33,7 @@ public class SpotifyAuthHandler implements AuthHandler {
     @Override
     public URI beginAuth() {
         return spotifyApiFactory
-                .createAnonApi(REDIRECT_URI)
+                .createRedirectApi(REDIRECT_URI)
                 .authorizationCodeUri()
                 .scope(AuthorizationScope.USER_READ_EMAIL)
                 .build()
@@ -42,7 +42,7 @@ public class SpotifyAuthHandler implements AuthHandler {
 
     @Override
     public CompletableFuture<UserSession> completeAuth(String code) {
-        var spotifyApi = spotifyApiFactory.createAnonApi(REDIRECT_URI);
+        var spotifyApi = spotifyApiFactory.createRedirectApi(REDIRECT_URI);
         var authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 
         return authorizationCodeRequest.executeAsync()

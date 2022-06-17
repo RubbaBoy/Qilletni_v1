@@ -42,6 +42,7 @@ public class PersistentTokenStore implements TokenStore {
         return refreshRequest.executeAsync().thenApplyAsync(result -> {
             token.setAccessToken(result.getAccessToken());
 
+            // TODO: QTNB-15: Remove explicit use of TokenRepository
             if (token instanceof OAuthToken) {
                 tokenRepository.save((OAuthToken) token);
             } else {
