@@ -1,4 +1,4 @@
-package is.yarr.qilletni.grpc.events;
+package is.yarr.qilletni.grpc.events.components;
 
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;

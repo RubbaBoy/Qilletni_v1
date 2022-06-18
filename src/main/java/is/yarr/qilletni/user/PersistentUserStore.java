@@ -1,6 +1,6 @@
 package is.yarr.qilletni.user;
 
-import is.yarr.qilletni.database.UserInfoRepository;
+import is.yarr.qilletni.database.repositories.UserInfoRepository;
 import is.yarr.qilletni.spotify.SpotifyApiFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

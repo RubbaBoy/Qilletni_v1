@@ -1,4 +1,4 @@
-package is.yarr.qilletni.grpc.events;
+package is.yarr.qilletni.grpc.events.components;
 
 import com.google.protobuf.ByteString;
 import io.grpc.stub.StreamObserver;

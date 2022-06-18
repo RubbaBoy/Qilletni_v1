@@ -1,4 +1,4 @@
-package is.yarr.qilletni.grpc.events;
+package is.yarr.qilletni.grpc.events.components;
 
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.components.Component;
@@ -10,7 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * A helper class to wrap a {@link CrudRepository} and remove associated gRPC boilerplate.

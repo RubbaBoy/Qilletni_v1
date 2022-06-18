@@ -1,6 +1,6 @@
 package is.yarr.qilletni.auth;
 
-import is.yarr.qilletni.database.UserSessionRepository;
+import is.yarr.qilletni.database.repositories.UserSessionRepository;
 import is.yarr.qilletni.user.SpotifyUserInfo;
 import is.yarr.qilletni.user.UserInfo;
 import org.springframework.scheduling.annotation.Async;

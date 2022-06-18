@@ -1,5 +1,6 @@
 package is.yarr.qilletni.database.repositories.external;
 
+import is.yarr.qilletni.database.UnsupportedTypeException;
 import is.yarr.qilletni.music.Song;
 import is.yarr.qilletni.music.SongId;
 import is.yarr.qilletni.music.SpotifySong;

@@ -4,13 +4,13 @@ import "events/component/request/rpc_mapping.proto";
 option java_multiple_files = true;
 option java_package = "is.yarr.qilletni.grpc.gen.request";
 
-service ComponentRequest {
-  rpc Retrieve(StructureRequestEvent) returns (ComponentRequestResponse);
+service ComponentRequestService {
+  rpc Retrieve(StructureRequestEvent) returns (StructureResponse);
 }
 
 message StructureRequestEvent {}
 
-message ComponentRequestResponse {
+message StructureResponse {
   repeated ComponentResponse components = 1;
 }
 

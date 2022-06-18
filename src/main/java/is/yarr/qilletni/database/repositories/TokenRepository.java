@@ -1,4 +1,4 @@
-package is.yarr.qilletni.database;
+package is.yarr.qilletni.database.repositories;
 
 import is.yarr.qilletni.auth.OAuthToken;
 import org.springframework.data.repository.CrudRepository;
