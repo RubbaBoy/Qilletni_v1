@@ -3,15 +3,15 @@ package is.yarr.qilletni.grpc.events;
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
-import is.yarr.qilletni.grpc.gen.events.rawcollection.RawCollectionCreateEvent;
-import is.yarr.qilletni.grpc.gen.events.rawcollection.RawCollectionGrpc;
-import is.yarr.qilletni.grpc.gen.events.rawcollection.RawCollectionSequentialChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.rawcollection.RawCollectionSongsChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.rawcollection.RawCollectionCreateEvent;
+import is.yarr.qilletni.grpc.gen.events.component.rawcollection.RawCollectionSequentialChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.rawcollection.RawCollectionServiceGrpc;
+import is.yarr.qilletni.grpc.gen.events.component.rawcollection.RawCollectionSongsChangeEvent;
 import org.springframework.security.access.annotation.Secured;
 
 import static is.yarr.qilletni.grpc.security.Authorities.GENERAL;
 
-public class RawCollectionService extends RawCollectionGrpc.RawCollectionImplBase {
+public class RawCollectionService extends RawCollectionServiceGrpc.RawCollectionServiceImplBase {
 
     @Override
     @Secured({GENERAL})

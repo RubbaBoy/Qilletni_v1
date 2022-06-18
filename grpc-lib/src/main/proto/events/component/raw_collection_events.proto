@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-import "events.proto";
+import "events/component/component_events.proto";
 
 option java_multiple_files = true;
-option java_package = "is.yarr.qilletni.grpc.gen.events.rawcollection";
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.rawcollection";
 
-service RawCollection {
+service RawCollectionService {
   rpc Create(RawCollectionCreateEvent) returns (CreateComponentResponse);
   rpc ChangeSequential(RawCollectionSequentialChangeEvent) returns (EmptyResponse);
   rpc ChangeSongs(RawCollectionSongsChangeEvent) returns (EmptyResponse);

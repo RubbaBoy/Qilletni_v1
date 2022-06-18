@@ -1,0 +1,38 @@
+syntax = "proto3";
+import "events/component/request/rpc_mapping.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.request";
+
+service SpotifyComponentDataService {
+  rpc RequestSpotifyComponentData(SpotifyComponentDataRequestEvent) returns (SpotifyComponentDataResponse);
+}
+
+message SpotifyComponentDataRequestEvent {
+  string componentId = 1;
+}
+
+message SpotifyComponentDataResponse {
+  oneof spotifyData {
+    SpotifyAlbumDataResponse albumData = 1;
+    SpotifyArtistDataResponse artistData = 2;
+    SpotifyPlaylistDataResponse playlistData = 3;
+    SpotifySearchDataResponse searchData = 4;
+  }
+}
+
+message SpotifyAlbumDataResponse {
+  Album album = 1;
+}
+
+message SpotifyArtistDataResponse {
+  Artist artist = 1;
+}
+
+message SpotifyPlaylistDataResponse {
+  Playlist playlist = 1;
+}
+
+message SpotifySearchDataResponse {
+  SpotifySearchData searchData = 1;
+}

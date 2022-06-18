@@ -3,20 +3,20 @@ package is.yarr.qilletni.grpc.events;
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyCreateEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyDataChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyGenreChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyGrpc;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyLimitChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifySequentialChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyTypeChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyYearChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.spotify.SpotifyYearRangeChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyCreateEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyDataChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyGenreChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyLimitChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifySequentialChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyServiceGrpc;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyTypeChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyYearChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.spotify.SpotifyYearRangeChangeEvent;
 import org.springframework.security.access.annotation.Secured;
 
 import static is.yarr.qilletni.grpc.security.Authorities.GENERAL;
 
-public class SpotifyService extends SpotifyGrpc.SpotifyImplBase {
+public class SpotifyService extends SpotifyServiceGrpc.SpotifyServiceImplBase {
 
     @Override
     @Secured({GENERAL})

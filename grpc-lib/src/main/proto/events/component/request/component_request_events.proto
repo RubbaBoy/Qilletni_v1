@@ -1,0 +1,68 @@
+syntax = "proto3";
+import "events/component/request/rpc_mapping.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.request";
+
+service ComponentRequest {
+  rpc Retrieve(StructureRequestEvent) returns (ComponentRequestResponse);
+}
+
+message StructureRequestEvent {}
+
+message ComponentRequestResponse {
+  repeated ComponentResponse components = 1;
+}
+
+message ComponentResponse {
+  ComponentBase base = 1;
+  oneof content {
+    SongComponentResponse song = 2;
+    ForLoopComponentResponse forLoop = 3;
+    FunctionComponentResponse functionComponent = 4;
+    RawCollectionComponentResponse rawCollection = 5;
+    LastFmCollectionComponentResponse lastFmCollection = 6;
+    SpotifyCollectionComponentResponse spotifyCollection = 7;
+  }
+}
+
+message ComponentBase {
+  string uuid = 1;
+  int32 color = 2;
+}
+
+message SongComponentResponse {
+  Song song = 1;
+}
+
+message ForLoopComponentResponse {
+  repeated ComponentResponse children = 1;
+
+  // TODO: This could also be a oneof and then disregard the LoopStrategy all together
+  LoopStrategy loopStrategy = 2;
+  optional int32 iterations = 3;
+  optional int32 duration = 4;
+  optional int64 absTime = 5;
+}
+
+message FunctionComponentResponse {
+  string name = 1;
+  repeated ComponentResponse children = 2 ;
+}
+
+message RawCollectionComponentResponse {
+  bool sequential = 1;
+  repeated Song songs = 2;
+}
+
+message LastFmCollectionComponentResponse {
+  bool sequential = 1;
+  optional int32 limit = 2;
+  LastFmCollectionType collectionType = 3;
+}
+
+message SpotifyCollectionComponentResponse {
+  bool sequential = 1;
+  optional int32 limit = 2;
+  SpotifyCollectionType collectionType = 3;
+}

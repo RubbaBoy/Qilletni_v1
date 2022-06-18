@@ -1,22 +1,16 @@
 syntax = "proto3";
 
-import "events.proto";
+import "events/component/component_events.proto";
+import "events/component/request/rpc_mapping.proto";
 
 option java_multiple_files = true;
-option java_package = "is.yarr.qilletni.grpc.gen.events.lastfm";
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.lastfm";
 
-service LastFm {
+service LastFmService {
   rpc Create(LastFmCreateEvent) returns (CreateComponentResponse);
   rpc ChangeSequential(LastFmSequentialChangeEvent) returns (EmptyResponse);
   rpc ChangeLimit(LastFmLimitChangeEvent) returns (EmptyResponse);
   rpc ChangeType(LastFmTypeChangeEvent) returns (EmptyResponse);
-}
-
-enum LastFmCollectionType {
-  TOP_TRACKS = 0;
-  LOVED_TRACKS = 1;
-  TOP_ARTIST = 2;
-  TOP_ALBUM = 3;
 }
 
 message LastFmCreateEvent {}

@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.request";
+
+message Song {
+  string id = 1;
+  string name = 2;
+  string artist = 3;
+  string artworkUrl = 4;
+}
+
+message Playlist {
+  string id = 1;
+  string name = 2;
+  string owner = 4;
+  string artworkUrl = 5;
+  int32 followers = 6;
+  string description = 7;
+}
+
+message Artist {
+  // TODO: Artist
+}
+
+message Album {
+  // TODO: Album
+}
+
+message YearRange {
+  int32 start_year = 1;
+  int32 end_year = 2;
+}
+message YearChooser {
+  oneof choose {
+    int32 year = 1;
+    YearRange range = 2;
+  }
+}
+
+message SpotifySearchData {
+  string searchData = 1;
+  optional YearChooser yearChooser = 2;
+  optional string genre = 3;
+}
+
+enum LoopStrategy {
+  NONE = 0;
+  ITERATIONS = 1;
+  DURATION = 2;
+  ABS_TIME = 3;
+}
+
+enum LastFmCollectionType {
+    TOP_TRACKS = 0;
+    LOVED_TRACKS = 1;
+    TOP_ARTIST = 2;
+    TOP_ALBUM = 3;
+}
+
+enum SpotifyCollectionType {
+    PLAYLIST = 0;
+    ARTIST = 1;
+    ALBUM = 2;
+    SEARCH = 3;
+}

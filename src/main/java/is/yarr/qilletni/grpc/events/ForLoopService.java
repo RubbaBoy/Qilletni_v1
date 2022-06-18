@@ -3,17 +3,17 @@ package is.yarr.qilletni.grpc.events;
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
-import is.yarr.qilletni.grpc.gen.events.forloop.ForLoopAbsTimeChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.forloop.ForLoopChildrenChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.forloop.ForLoopCreateEvent;
-import is.yarr.qilletni.grpc.gen.events.forloop.ForLoopDurationChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.forloop.ForLoopGrpc;
-import is.yarr.qilletni.grpc.gen.events.forloop.ForLoopIterationsChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.forloop.ForLoopAbsTimeChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.forloop.ForLoopChildrenChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.forloop.ForLoopCreateEvent;
+import is.yarr.qilletni.grpc.gen.events.component.forloop.ForLoopDurationChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.forloop.ForLoopIterationsChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.forloop.ForLoopServiceGrpc;
 import org.springframework.security.access.annotation.Secured;
 
 import static is.yarr.qilletni.grpc.security.Authorities.GENERAL;
 
-public class ForLoopService extends ForLoopGrpc.ForLoopImplBase {
+public class ForLoopService extends ForLoopServiceGrpc.ForLoopServiceImplBase {
 
     @Override
     @Secured({GENERAL})

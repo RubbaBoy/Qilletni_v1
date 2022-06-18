@@ -2,14 +2,14 @@ package is.yarr.qilletni.grpc.events;
 
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
-import is.yarr.qilletni.grpc.gen.events.general.DeleteEvent;
-import is.yarr.qilletni.grpc.gen.events.general.GeneralGrpc;
-import is.yarr.qilletni.grpc.gen.events.general.RecolorEvent;
+import is.yarr.qilletni.grpc.gen.events.component.general.DeleteEvent;
+import is.yarr.qilletni.grpc.gen.events.component.general.GeneralServiceGrpc;
+import is.yarr.qilletni.grpc.gen.events.component.general.RecolorEvent;
 import org.springframework.security.access.annotation.Secured;
 
 import static is.yarr.qilletni.grpc.security.Authorities.GENERAL;
 
-public class GeneralEventService extends GeneralGrpc.GeneralImplBase {
+public class GeneralEventService extends GeneralServiceGrpc.GeneralServiceImplBase {
 
     @Override
     @Secured({GENERAL})

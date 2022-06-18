@@ -3,16 +3,16 @@ package is.yarr.qilletni.grpc.events;
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
-import is.yarr.qilletni.grpc.gen.events.lastfm.LastFmCreateEvent;
-import is.yarr.qilletni.grpc.gen.events.lastfm.LastFmGrpc;
-import is.yarr.qilletni.grpc.gen.events.lastfm.LastFmLimitChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.lastfm.LastFmSequentialChangeEvent;
-import is.yarr.qilletni.grpc.gen.events.lastfm.LastFmTypeChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.lastfm.LastFmCreateEvent;
+import is.yarr.qilletni.grpc.gen.events.component.lastfm.LastFmLimitChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.lastfm.LastFmSequentialChangeEvent;
+import is.yarr.qilletni.grpc.gen.events.component.lastfm.LastFmServiceGrpc;
+import is.yarr.qilletni.grpc.gen.events.component.lastfm.LastFmTypeChangeEvent;
 import org.springframework.security.access.annotation.Secured;
 
 import static is.yarr.qilletni.grpc.security.Authorities.GENERAL;
 
-public class LastFmService extends LastFmGrpc.LastFmImplBase {
+public class LastFmService extends LastFmServiceGrpc.LastFmServiceImplBase {
 
     @Override
     @Secured({GENERAL})

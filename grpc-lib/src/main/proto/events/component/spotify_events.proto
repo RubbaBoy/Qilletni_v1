@@ -1,11 +1,12 @@
 syntax = "proto3";
 
-import "events.proto";
+import "events/component/component_events.proto";
+import "events/component/request/rpc_mapping.proto";
 
 option java_multiple_files = true;
-option java_package = "is.yarr.qilletni.grpc.gen.events.spotify";
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.spotify";
 
-service Spotify {
+service SpotifyService {
   rpc Create(SpotifyCreateEvent) returns (CreateComponentResponse);
   rpc ChangeSequential(SpotifySequentialChangeEvent) returns (EmptyResponse);
   rpc ChangeLimit(SpotifyLimitChangeEvent) returns (EmptyResponse);
@@ -14,18 +15,6 @@ service Spotify {
   rpc ChangeYearRange(SpotifyYearRangeChangeEvent) returns (EmptyResponse);
   rpc ChangeYear(SpotifyYearChangeEvent) returns (EmptyResponse);
   rpc ChangeGenre(SpotifyGenreChangeEvent) returns (EmptyResponse);
-}
-
-enum SpotifyCollectionType {
-  PLAYLIST = 0;
-  ARTIST = 1;
-  ALBUM = 2;
-  SEARCH = 3;
-}
-
-message YearRange {
-  int32 start_year = 1;
-  int32 end_year = 2;
 }
 
 message SpotifyCreateEvent {}
