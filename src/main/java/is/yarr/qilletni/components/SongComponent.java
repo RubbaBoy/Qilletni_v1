@@ -29,7 +29,7 @@ public class SongComponent extends Component {
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return songId != null;
     }
 

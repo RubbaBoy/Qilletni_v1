@@ -41,7 +41,7 @@ public abstract class Component {
      *
      * @return If the component is ready to play
      */
-    abstract boolean isInitialized();
+    public abstract boolean isInitialized();
 
     /**
      * Gets the unique identifier of the Component instance.

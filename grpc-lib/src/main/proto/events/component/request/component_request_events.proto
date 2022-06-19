@@ -1,5 +1,6 @@
 syntax = "proto3";
 import "events/component/request/rpc_mapping.proto";
+import "events/component/component_events.proto";
 
 option java_multiple_files = true;
 option java_package = "is.yarr.qilletni.grpc.gen.request";
@@ -8,10 +9,13 @@ service ComponentRequestService {
   rpc Retrieve(StructureRequestEvent) returns (StructureResponse);
 }
 
-message StructureRequestEvent {}
+message StructureRequestEvent {
+  string board_id = 1;
+}
 
 message StructureResponse {
-  repeated ComponentResponse components = 1;
+  optional ResponseError error = 1;
+  repeated ComponentResponse components = 2;
 }
 
 message ComponentResponse {
@@ -27,7 +31,7 @@ message ComponentResponse {
 }
 
 message ComponentBase {
-  string uuid = 1;
+  string component_id = 1;
   int32 color = 2;
 }
 

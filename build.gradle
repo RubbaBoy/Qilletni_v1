@@ -68,6 +68,10 @@ dependencies {
 //    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
 }
 
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
+
 //protobuf {
 //    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
 //    plugins {

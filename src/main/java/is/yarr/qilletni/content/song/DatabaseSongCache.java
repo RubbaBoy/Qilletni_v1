@@ -50,6 +50,10 @@ public class DatabaseSongCache implements SongCache {
                         .isEmpty())
                 .toList();
 
+        if (unknownSongs.isEmpty()) {
+            return CompletableFuture.completedFuture(Collections.unmodifiableList(returningSongs));
+        }
+
         return songRetriever.fetchSongs(unknownSongs)
                 .thenApply(retrievedSongs -> {
                     returningSongs.addAll(retrievedSongs);

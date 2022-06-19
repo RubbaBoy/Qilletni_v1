@@ -1,7 +1,6 @@
 package is.yarr.qilletni.database.repositories.components;
 
 import is.yarr.qilletni.components.Component;
-import is.yarr.qilletni.components.FunctionComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -11,22 +10,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ComponentAggregatorRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComponentAggregatorRepository.class);
 
-    private final FunctionComponentRepository functionComponentRepository;
     private final List<BoardOwnedRepository<? extends Component, UUID>> boardOwnedRepositories;
 
-    public ComponentAggregatorRepository(FunctionComponentRepository functionComponentRepository) {
-        this.functionComponentRepository = functionComponentRepository;
+    public ComponentAggregatorRepository(FunctionComponentRepository functionComponentRepository, SongComponentRepository songComponentRepository) {
         this.boardOwnedRepositories = List.of(
-                // TODO: Put other component repositories here, when they are more implemented
+                functionComponentRepository,
+                songComponentRepository
         );
 
         LOGGER.debug("Registered {} board-owned repositories", this.boardOwnedRepositories.size());
@@ -36,32 +32,16 @@ public class ComponentAggregatorRepository {
      * Collects all components from the given board.
      *
      * @param boardId The board to collect from
-     * @return The functions and other components separated
+     * @return A map of components and their instance IDs
      */
     @Async
-    public CompletableFuture<ComponentAggregatorResult> getComponentsFromBoard(UUID boardId) {
-        var functionComponentMap = transformToComponentMap(functionComponentRepository.findAllByBoardId(boardId).stream(), Function.identity());
-
-        var componentStream = boardOwnedRepositories.parallelStream()
+    public CompletableFuture<Map<UUID, Component>> getComponentsFromBoard(UUID boardId) {
+        var componentMap = boardOwnedRepositories.parallelStream()
                 .map(repository -> repository.findAllByBoardId(boardId))
-                .flatMap(List::stream);
+                .flatMap(List::stream)
+                .collect(Collectors.toMap(Component::getInstanceId, Component.class::cast));
 
-        var componentMap = transformToComponentMap(componentStream, Component.class::cast);
-
-        return CompletableFuture.completedFuture(new ComponentAggregatorResult(functionComponentMap, componentMap));
+        return CompletableFuture.completedFuture(componentMap);
     }
-
-    private <T extends Component, U extends Component> Map<UUID, T> transformToComponentMap(Stream<U> components, Function<U, T> mapper) {
-        return components.collect(Collectors.toMap(Component::getInstanceId, mapper));
-    }
-
-    /**
-     * A data class to hold function components and everything else, for easy filtering. Each UUID key is the
-     * {@link Component#getInstanceId()} of the component.
-     *
-     * @param functionComponents The functions of the board
-     * @param components         All the other non-functions of the board
-     */
-    record ComponentAggregatorResult(Map<UUID, FunctionComponent> functionComponents, Map<UUID, Component> components) {}
 
 }

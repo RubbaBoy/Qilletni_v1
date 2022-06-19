@@ -32,7 +32,7 @@ public class RawCollectionComponent extends Component {
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return songs != null;
     }
 

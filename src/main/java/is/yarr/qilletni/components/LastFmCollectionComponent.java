@@ -30,7 +30,7 @@ public class LastFmCollectionComponent extends Component {
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return true;
     }
 
@@ -103,7 +103,7 @@ public class LastFmCollectionComponent extends Component {
     /**
      * An enum to determine what data is being fetched from LastFm.
      */
-    enum LastFmCollectionType {
+    public enum LastFmCollectionType {
 
         /**
          * The user's top tracks.
