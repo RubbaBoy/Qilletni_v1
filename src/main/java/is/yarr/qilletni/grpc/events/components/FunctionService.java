@@ -11,6 +11,7 @@ import is.yarr.qilletni.grpc.gen.events.component.function.FunctionChangeChildre
 import is.yarr.qilletni.grpc.gen.events.component.function.FunctionCreateEvent;
 import is.yarr.qilletni.grpc.gen.events.component.function.FunctionNameChangeEvent;
 import is.yarr.qilletni.grpc.gen.events.component.function.FunctionServiceGrpc;
+import is.yarr.qilletni.grpc.security.UserSessionSecurityContext;
 import is.yarr.qilletni.utility.UUIDUtils;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.access.annotation.Secured;
@@ -39,11 +40,12 @@ public class FunctionService extends FunctionServiceGrpc.FunctionServiceImplBase
     @Override
     @Secured({GENERAL})
     public void changeChildren(FunctionChangeChildrenEvent request, StreamObserver<EmptyResponse> responseObserver) {
+        var userInfo = UserSessionSecurityContext.getCurrentUserInfo();
         var componentId = UUID.fromString(request.getModify().getComponentId());
 
         // TODO: QTNB-12: Validate UUIDs are actual component IDs
 
-        repositoryInterfacer.getComponent(componentId, responseObserver, functionComponent -> {
+        repositoryInterfacer.getComponent(componentId, userInfo.getId(), responseObserver, functionComponent -> {
             var childrenIdArray = request.getChildrenList()
                     .stream()
                     .map(ByteString::toByteArray)
@@ -58,9 +60,10 @@ public class FunctionService extends FunctionServiceGrpc.FunctionServiceImplBase
     @Override
     @Secured({GENERAL})
     public void changeName(FunctionNameChangeEvent request, StreamObserver<EmptyResponse> responseObserver) {
+        var userInfo = UserSessionSecurityContext.getCurrentUserInfo();
         var componentId = UUID.fromString(request.getModify().getComponentId());
 
-        repositoryInterfacer.getComponent(componentId, responseObserver, functionComponent -> {
+        repositoryInterfacer.getComponent(componentId, userInfo.getId(), responseObserver, functionComponent -> {
             functionComponent.setName(request.getName());
             functionComponentRepository.save(functionComponent);
         });

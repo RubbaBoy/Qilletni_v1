@@ -37,9 +37,7 @@ public class BoardService extends BoardServiceGrpc.BoardServiceImplBase {
     @Override
     @Secured({GENERAL})
     public void create(BoardCreateEvent request, StreamObserver<BoardCreateResponse> responseObserver) {
-        UserSessionAuthenticationToken auth = UserSessionSecurityContext.getAuthToken();
-        UserInfo userInfo = auth.getPrincipal();
-
+        var userInfo = UserSessionSecurityContext.getCurrentUserInfo();
         var boardId = UUID.randomUUID();
         var boardName = request.getName();
 
@@ -65,14 +63,13 @@ public class BoardService extends BoardServiceGrpc.BoardServiceImplBase {
     @Override
     @Secured({GENERAL})
     public void changeName(BoardNameChangeEvent request, StreamObserver<EmptyResponse> responseObserver) {
-        UserSessionAuthenticationToken auth = UserSessionSecurityContext.getAuthToken();
-        UserInfo userInfo = auth.getPrincipal();
+        var userInfo = UserSessionSecurityContext.getCurrentUserInfo();
         var boardId = UUID.fromString(request.getModify().getBoardId());
-        var name = request.getName();
+        var boardName = request.getName();
 
         LOGGER.debug("Changing name of board {} to {}", boardId, request.getName());
 
-        if (!isValidName(name)) {
+        if (!isValidName(boardName)) {
             ResponseUtility.sendTerminatingError(responseObserver, "Invalid name given", 400);
             return;
         }

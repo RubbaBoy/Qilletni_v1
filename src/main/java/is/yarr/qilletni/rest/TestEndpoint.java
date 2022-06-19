@@ -4,6 +4,7 @@ import is.yarr.qilletni.auth.AuthHandler;
 import is.yarr.qilletni.auth.SessionHandler;
 import is.yarr.qilletni.content.playlist.PlaylistCache;
 import is.yarr.qilletni.content.song.SongCache;
+import is.yarr.qilletni.database.repositories.components.FunctionComponentRepository;
 import is.yarr.qilletni.music.SpotifyPlaylistId;
 import is.yarr.qilletni.music.SpotifySongId;
 import org.apache.hc.core5.http.ParseException;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -41,12 +43,25 @@ public class TestEndpoint {
     private final SessionHandler sessionHandler;
     private final SongCache songCache;
     private final PlaylistCache playlistCache;
+    private final FunctionComponentRepository componentRepository;
 
-    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache, PlaylistCache playlistCache) {
+    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache, PlaylistCache playlistCache, FunctionComponentRepository componentRepository) {
         this.authHandler = authHandler;
         this.sessionHandler = sessionHandler;
         this.songCache = songCache;
         this.playlistCache = playlistCache;
+        this.componentRepository = componentRepository;
+    }
+
+    @GetMapping("/test_ownership")
+    public ResponseEntity<?> testOwnership(@Param("name") String name, @Param("componentId") String componentId) {
+        LOGGER.debug("name = {}", name);
+        LOGGER.debug("componentId = {}", componentId);
+
+        var component = componentRepository.findComponentOwnedBy(UUID.fromString(componentId), name);
+
+        LOGGER.debug("{}", component);
+        return new ResponseEntity<>(component, HttpStatus.OK);
     }
 
     @GetMapping("/demo")

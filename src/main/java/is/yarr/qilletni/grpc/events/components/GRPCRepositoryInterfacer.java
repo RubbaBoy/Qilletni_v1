@@ -3,6 +3,7 @@ package is.yarr.qilletni.grpc.events.components;
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.components.Component;
 import is.yarr.qilletni.database.repositories.BoardRepository;
+import is.yarr.qilletni.database.repositories.components.BoardOwnedRepository;
 import is.yarr.qilletni.grpc.events.ResponseUtility;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;
 import is.yarr.qilletni.grpc.gen.CreateEvent;
@@ -24,7 +25,7 @@ import java.util.function.Consumer;
  */
 public class GRPCRepositoryInterfacer<T extends Component> {
 
-    private final CrudRepository<T, UUID> repository;
+    private final BoardOwnedRepository<T, UUID> repository;
     private final BoardRepository boardRepository;
 
     /**
@@ -33,7 +34,7 @@ public class GRPCRepositoryInterfacer<T extends Component> {
      * @param repository      The repository
      * @param boardRepository The board repository
      */
-    public GRPCRepositoryInterfacer(CrudRepository<T, UUID> repository, BoardRepository boardRepository) {
+    public GRPCRepositoryInterfacer(BoardOwnedRepository<T, UUID> repository, BoardRepository boardRepository) {
         this.repository = repository;
         this.boardRepository = boardRepository;
     }
@@ -45,11 +46,12 @@ public class GRPCRepositoryInterfacer<T extends Component> {
      * relevant error message is sent to the output.
      *
      * @param componentId       The component ID
+     * @param ownerId
      * @param responseObserver  The response {@link StreamObserver} provided by gRPC
      * @param componentConsumer The consumer invoked with the found component
      */
-    public void getComponent(UUID componentId, StreamObserver<EmptyResponse> responseObserver, Consumer<T> componentConsumer) {
-        repository.findById(componentId)
+    public void getComponent(UUID componentId, String ownerId, StreamObserver<EmptyResponse> responseObserver, Consumer<T> componentConsumer) {
+        repository.findComponentOwnedBy(componentId, ownerId)
                 .ifPresentOrElse(component -> {
                             componentConsumer.accept(component);
                             responseObserver.onNext(EmptyResponse.newBuilder().build());
