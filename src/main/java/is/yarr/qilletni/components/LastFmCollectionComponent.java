@@ -23,9 +23,10 @@ public class LastFmCollectionComponent extends Component {
      * Creates a {@link LastFmCollectionComponent} with a given instance ID.
      *
      * @param instanceId The instance ID
+     * @param boardId The ID of the {@link is.yarr.qilletni.board.Board} this component is a part of
      */
-    public LastFmCollectionComponent(UUID instanceId) {
-        super(instanceId);
+    public LastFmCollectionComponent(UUID instanceId, UUID boardId) {
+        super(instanceId, boardId);
     }
 
     @Override

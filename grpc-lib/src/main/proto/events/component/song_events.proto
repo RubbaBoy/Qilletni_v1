@@ -10,7 +10,9 @@ service SongService {
   rpc ChangeSong(SongChangeEvent) returns (EmptyResponse);
 }
 
-message SongCreateEvent {}
+message SongCreateEvent {
+  CreateEvent create = 1;
+}
 
 message SongChangeEvent {
   string id = 1;

@@ -1,5 +1,6 @@
 package is.yarr.qilletni.components;
 
+import is.yarr.qilletni.board.Board;
 import is.yarr.qilletni.database.converters.ColorConverter;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ public abstract class Component {
 
     @Id
     private UUID instanceId;
+    private UUID boardId;
 
     @Convert(converter = ColorConverter.class)
     private Color color;
@@ -28,8 +30,9 @@ public abstract class Component {
      *
      * @param instanceId The instance ID
      */
-    protected Component(UUID instanceId) {
+    protected Component(UUID instanceId, UUID boardId) {
         this.instanceId = instanceId;
+        this.boardId = boardId;
     }
 
     /**
@@ -47,6 +50,15 @@ public abstract class Component {
      */
     public UUID getInstanceId() {
         return instanceId;
+    }
+
+    /**
+     * Gets the {@link Board} ID that this component is a part of.
+     *
+     * @return The board ID
+     */
+    public UUID getBoardId() {
+        return boardId;
     }
 
     /**

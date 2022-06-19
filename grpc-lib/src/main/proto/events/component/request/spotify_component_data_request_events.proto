@@ -9,15 +9,15 @@ service SpotifyComponentDataService {
 }
 
 message SpotifyComponentDataRequestEvent {
-  string componentId = 1;
+  string component_id = 1;
 }
 
 message SpotifyComponentDataResponse {
   oneof spotifyData {
-    SpotifyAlbumDataResponse albumData = 1;
-    SpotifyArtistDataResponse artistData = 2;
-    SpotifyPlaylistDataResponse playlistData = 3;
-    SpotifySearchDataResponse searchData = 4;
+    SpotifyAlbumDataResponse album_data = 1;
+    SpotifyArtistDataResponse artist_data = 2;
+    SpotifyPlaylistDataResponse playlist_data = 3;
+    SpotifySearchDataResponse search_data = 4;
   }
 }
 
@@ -34,5 +34,5 @@ message SpotifyPlaylistDataResponse {
 }
 
 message SpotifySearchDataResponse {
-  SpotifySearchData searchData = 1;
+  SpotifySearchData search_data = 1;
 }

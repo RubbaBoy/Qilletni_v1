@@ -35,5 +35,5 @@ public interface Board {
      *
      * @return The board owner's ID
      */
-    UUID getOwnerId();
+    String getOwnerId();
 }

@@ -11,7 +11,9 @@ service FunctionService {
   rpc ChangeName(FunctionNameChangeEvent) returns (EmptyResponse);
 }
 
-message FunctionCreateEvent {}
+message FunctionCreateEvent {
+  CreateEvent create = 1;
+}
 
 message FunctionChangeChildrenEvent {
   ModifyEvent modify = 1;

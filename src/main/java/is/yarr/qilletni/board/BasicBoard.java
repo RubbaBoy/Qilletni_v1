@@ -10,11 +10,11 @@ public class BasicBoard implements Board {
     @Id
     private UUID id;
     private String name;
-    private UUID ownerId;
+    private String ownerId;
 
     protected BasicBoard() {}
 
-    public BasicBoard(UUID id, String name, UUID ownerId) {
+    public BasicBoard(UUID id, String name, String ownerId) {
         this.id = id;
         this.name = name;
         this.ownerId = ownerId;
@@ -36,7 +36,7 @@ public class BasicBoard implements Board {
     }
 
     @Override
-    public UUID getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 

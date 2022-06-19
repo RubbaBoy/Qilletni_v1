@@ -17,7 +17,9 @@ service SpotifyService {
   rpc ChangeGenre(SpotifyGenreChangeEvent) returns (EmptyResponse);
 }
 
-message SpotifyCreateEvent {}
+message SpotifyCreateEvent {
+  CreateEvent create = 1;
+}
 
 message SpotifySequentialChangeEvent {
   ModifyEvent modify = 1;

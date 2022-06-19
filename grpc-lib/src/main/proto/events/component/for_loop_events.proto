@@ -13,7 +13,9 @@ service ForLoopService {
   rpc ChangeAbsTime(ForLoopAbsTimeChangeEvent) returns (EmptyResponse);
 }
 
-message ForLoopCreateEvent {}
+message ForLoopCreateEvent {
+  CreateEvent create = 1;
+}
 
 message ForLoopChildrenChangeEvent {
   ModifyEvent modify = 1;

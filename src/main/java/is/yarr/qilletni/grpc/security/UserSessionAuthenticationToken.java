@@ -44,6 +44,11 @@ public class UserSessionAuthenticationToken extends AbstractAuthenticationToken 
         super.setAuthenticated(true);
     }
 
+    /**
+     * Gets the user's session ID.
+     *
+     * @return The session ID
+     */
     @Override
     public UUID getCredentials() {
         return sessionId;

@@ -7,14 +7,14 @@ message Song {
   string id = 1;
   string name = 2;
   string artist = 3;
-  string artworkUrl = 4;
+  string artwork_url = 4;
 }
 
 message Playlist {
   string id = 1;
   string name = 2;
   string owner = 4;
-  string artworkUrl = 5;
+  string artwork_url = 5;
   int32 followers = 6;
   string description = 7;
 }
@@ -41,7 +41,7 @@ message YearChooser {
 
 message SpotifySearchData {
   string searchData = 1;
-  optional YearChooser yearChooser = 2;
+  optional YearChooser year_chooser = 2;
   optional string genre = 3;
 }
 

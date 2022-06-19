@@ -18,11 +18,11 @@ message ComponentResponse {
   ComponentBase base = 1;
   oneof content {
     SongComponentResponse song = 2;
-    ForLoopComponentResponse forLoop = 3;
-    FunctionComponentResponse functionComponent = 4;
-    RawCollectionComponentResponse rawCollection = 5;
-    LastFmCollectionComponentResponse lastFmCollection = 6;
-    SpotifyCollectionComponentResponse spotifyCollection = 7;
+    ForLoopComponentResponse for_loop = 3;
+    FunctionComponentResponse function_component = 4;
+    RawCollectionComponentResponse raw_collection = 5;
+    LastFmCollectionComponentResponse last_fm_collection = 6;
+    SpotifyCollectionComponentResponse spotify_collection = 7;
   }
 }
 
@@ -39,7 +39,7 @@ message ForLoopComponentResponse {
   repeated ComponentResponse children = 1;
 
   // TODO: This could also be a oneof and then disregard the LoopStrategy all together
-  LoopStrategy loopStrategy = 2;
+  LoopStrategy loop_strategy = 2;
   optional int32 iterations = 3;
   optional int32 duration = 4;
   optional int64 absTime = 5;
@@ -58,11 +58,11 @@ message RawCollectionComponentResponse {
 message LastFmCollectionComponentResponse {
   bool sequential = 1;
   optional int32 limit = 2;
-  LastFmCollectionType collectionType = 3;
+  LastFmCollectionType collection_type = 3;
 }
 
 message SpotifyCollectionComponentResponse {
   bool sequential = 1;
   optional int32 limit = 2;
-  SpotifyCollectionType collectionType = 3;
+  SpotifyCollectionType collection_type = 3;
 }

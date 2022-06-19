@@ -13,7 +13,9 @@ service LastFmService {
   rpc ChangeType(LastFmTypeChangeEvent) returns (EmptyResponse);
 }
 
-message LastFmCreateEvent {}
+message LastFmCreateEvent {
+  CreateEvent create = 1;
+}
 
 message LastFmSequentialChangeEvent {
   ModifyEvent modify = 1;

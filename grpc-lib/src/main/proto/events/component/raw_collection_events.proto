@@ -11,7 +11,9 @@ service RawCollectionService {
   rpc ChangeSongs(RawCollectionSongsChangeEvent) returns (EmptyResponse);
 }
 
-message RawCollectionCreateEvent {}
+message RawCollectionCreateEvent {
+  CreateEvent create = 1;
+}
 
 message RawCollectionSequentialChangeEvent {
   ModifyEvent modify = 1;

@@ -29,9 +29,10 @@ public class SpotifyCollectionComponent extends Component {
      * Creates a {@link SpotifyCollectionComponent} with a given instance ID.
      *
      * @param instanceId The instance ID
+     * @param boardId The ID of the {@link is.yarr.qilletni.board.Board} this component is a part of
      */
-    public SpotifyCollectionComponent(UUID instanceId) {
-        super(instanceId);
+    public SpotifyCollectionComponent(UUID instanceId, UUID boardId) {
+        super(instanceId, boardId);
     }
 
     @Override

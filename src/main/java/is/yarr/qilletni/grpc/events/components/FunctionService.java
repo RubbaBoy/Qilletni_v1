@@ -3,6 +3,7 @@ package is.yarr.qilletni.grpc.events.components;
 import com.google.protobuf.ByteString;
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.components.FunctionComponent;
+import is.yarr.qilletni.database.repositories.BoardRepository;
 import is.yarr.qilletni.database.repositories.components.FunctionComponentRepository;
 import is.yarr.qilletni.grpc.gen.CreateComponentResponse;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
@@ -24,15 +25,15 @@ public class FunctionService extends FunctionServiceGrpc.FunctionServiceImplBase
     private final FunctionComponentRepository functionComponentRepository;
     private final GRPCRepositoryInterfacer<FunctionComponent> repositoryInterfacer;
 
-    public FunctionService(FunctionComponentRepository functionComponentRepository) {
+    public FunctionService(FunctionComponentRepository functionComponentRepository, BoardRepository boardRepository) {
         this.functionComponentRepository = functionComponentRepository;
-        this.repositoryInterfacer = new GRPCRepositoryInterfacer<>(functionComponentRepository);
+        this.repositoryInterfacer = new GRPCRepositoryInterfacer<>(functionComponentRepository, boardRepository);
     }
 
     @Override
     @Secured({GENERAL})
     public void create(FunctionCreateEvent request, StreamObserver<CreateComponentResponse> responseObserver) {
-        repositoryInterfacer.createComponent(FunctionComponent::new, responseObserver);
+        repositoryInterfacer.createComponent(FunctionComponent::new, request.getCreate(), responseObserver);
     }
 
     @Override

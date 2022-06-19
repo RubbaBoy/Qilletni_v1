@@ -29,6 +29,7 @@ message HelloReply {
 
 message ResponseError {
   string message = 1;
+  int32 code = 2;
 }
 
 message EmptyResponse {
@@ -42,4 +43,8 @@ message CreateComponentResponse {
 
 message ModifyEvent {
   string component_id = 1;
+}
+
+message CreateEvent {
+  string board_id = 1;
 }
