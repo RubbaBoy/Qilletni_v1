@@ -20,6 +20,8 @@ import is.yarr.qilletni.grpc.gen.request.SongComponentResponse;
 import is.yarr.qilletni.grpc.gen.request.SpotifyCollectionComponentResponse;
 import is.yarr.qilletni.grpc.gen.request.SpotifyCollectionType;
 import is.yarr.qilletni.music.SongId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
@@ -40,6 +42,7 @@ import java.util.stream.Stream;
  * etc. and caches them into an internal map so component creation is faster and synchronous.
  */
 public class CachedMapper {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CachedMapper.class);
     private static final Executor executor = Executors.newCachedThreadPool();
 
     public static final int COLOR_NOT_FOUND = -1;

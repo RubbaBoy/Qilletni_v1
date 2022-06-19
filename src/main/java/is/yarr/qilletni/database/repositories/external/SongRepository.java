@@ -7,6 +7,7 @@ import is.yarr.qilletni.music.SpotifySong;
 import is.yarr.qilletni.music.SpotifySongId;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,10 +46,32 @@ public class SongRepository {
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
     public Song save(Song song) {
-        if (!(song instanceof SpotifySong)) {
+        if (!(song instanceof SpotifySong spotifySong)) {
             throw new UnsupportedTypeException(song);
         }
 
-        return spotifySongRepository.save((SpotifySong) song);
+        return spotifySongRepository.save(spotifySong);
+    }
+
+    /**
+     * Saves a list of {@link Song}s to their appropriate repository. They must all be the same type.
+     *
+     * @param songs The songs to save
+     * @return The saved songs
+     * @throws UnsupportedTypeException If a repository for the given type is not found
+     */
+    public List<Song> saveAll(List<Song> songs) {
+        if (songs.isEmpty()) {
+            return songs;
+        }
+
+        if (!(songs.get(0) instanceof SpotifySong)) {
+            throw new UnsupportedTypeException(songs.get(0));
+        }
+
+        spotifySongRepository.saveAll(songs.stream()
+                .map(SpotifySong.class::cast).toList());
+
+        return songs;
     }
 }

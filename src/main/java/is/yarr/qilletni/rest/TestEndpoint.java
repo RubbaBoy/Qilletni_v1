@@ -2,10 +2,13 @@ package is.yarr.qilletni.rest;
 
 import is.yarr.qilletni.auth.AuthHandler;
 import is.yarr.qilletni.auth.SessionHandler;
+import is.yarr.qilletni.components.FunctionComponent;
+import is.yarr.qilletni.components.RawCollectionComponent;
 import is.yarr.qilletni.components.SongComponent;
 import is.yarr.qilletni.content.playlist.PlaylistCache;
 import is.yarr.qilletni.content.song.SongCache;
 import is.yarr.qilletni.database.repositories.components.FunctionComponentRepository;
+import is.yarr.qilletni.database.repositories.components.RawCollectionComponentRepository;
 import is.yarr.qilletni.database.repositories.components.SongComponentRepository;
 import is.yarr.qilletni.music.SpotifyPlaylistId;
 import is.yarr.qilletni.music.SpotifySongId;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 /**
  * This class will be removed when this starts getting more production-ready, do not let the code quality or
@@ -46,35 +50,53 @@ public class TestEndpoint {
     private final PlaylistCache playlistCache;
     private final FunctionComponentRepository functionComponentRepository;
     private final SongComponentRepository songComponentRepository;
+    private final RawCollectionComponentRepository rawCollectionComponentRepository;
 
-    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache, PlaylistCache playlistCache, FunctionComponentRepository functionComponentRepository, SongComponentRepository songComponentRepository) {
+    public TestEndpoint(AuthHandler authHandler, SessionHandler sessionHandler, SongCache songCache, PlaylistCache playlistCache, FunctionComponentRepository functionComponentRepository, SongComponentRepository songComponentRepository, RawCollectionComponentRepository rawCollectionComponentRepository) {
         this.authHandler = authHandler;
         this.sessionHandler = sessionHandler;
         this.songCache = songCache;
         this.playlistCache = playlistCache;
         this.functionComponentRepository = functionComponentRepository;
         this.songComponentRepository = songComponentRepository;
+        this.rawCollectionComponentRepository = rawCollectionComponentRepository;
     }
 
     @GetMapping("/foo")
     public ResponseEntity<?> foo() {
         var myBoard = UUID.fromString("e7144b81-1244-4fd8-9956-5eedeed8246d");
-        var myFunction = UUID.fromString("33cb2a83-a4fe-43eb-ae63-189383af307b");
 
 //        LOGGER.debug("name = {}", name);
 //        LOGGER.debug("componentId = {}", componentId);
 
-        var songId = UUID.fromString("b593db01-d689-4e05-bac5-6fe69e00a80a");
+//        var songId = UUID.fromString("b593db01-d689-4e05-bac5-6fe69e00a80a");
 
-//        songComponentRepository.save(new SongComponent(songId, myBoard));
+//        var children = Stream.of("3idDCx8VXTkqPL6UQTK4bl", "7EllQktMuwLTLxDulLn0OY", "3EuZ0a81ka2N2EUbUeVeF5", "0HrGzCf2C0C75beCx6aUqu").map(songId -> {
+//            var component = new SongComponent(UUID.randomUUID(), myBoard);
+//            component.setSongId(new SpotifySongId(songId));
+//            var id = songComponentRepository.save(component).getInstanceId();
+//
+//            LOGGER.info("Created component ID: {}", id);
+//            return id;
+//        }).toArray(UUID[]::new);
+//
+////        var component = functionComponentRepository.findComponentOwnedBy(myFunction, "rubbaboy")
+////                .orElseThrow();
+//
+//        var createdFunction = new FunctionComponent(UUID.randomUUID(), myBoard);
+//        createdFunction.setChildren(children);
+//
+//        functionComponentRepository.save(createdFunction);
 
-        var component = functionComponentRepository.findComponentOwnedBy(myFunction, "rubbaboy")
-                .orElseThrow();
+        var component = new RawCollectionComponent(UUID.randomUUID(), myBoard);
+        var songs = Stream.of(
+        "0mFaWgcWph8oldTKMnWeQW", "2hXwOk0PnRVceFA5O3EcNv", "5lruZuUNMmcBfVybmEjxvM")
+                .map(SpotifySongId::new)
+                        .toArray(SpotifySongId[]::new);
+        component.setSongs(songs);
+        component.setSequential(true);
 
-        component.setChildren(new UUID[]{songId});
-
-        LOGGER.debug("{}", component);
-        functionComponentRepository.save(component);
+        rawCollectionComponentRepository.save(component);
 
         return new ResponseEntity<>(component, HttpStatus.OK);
     }

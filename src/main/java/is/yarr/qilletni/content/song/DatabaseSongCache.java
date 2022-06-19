@@ -44,7 +44,7 @@ public class DatabaseSongCache implements SongCache {
     public CompletableFuture<List<Song>> getSongs(List<SongId> songIds) {
         var returningSongs = new ArrayList<Song>();
 
-        var unknownSongs = songIds.parallelStream()
+        var unknownSongs = songIds.stream()
                 .filter(songId -> songRepository.findById(songId)
                         .map(returningSongs::add)
                         .isEmpty())
@@ -56,6 +56,7 @@ public class DatabaseSongCache implements SongCache {
 
         return songRetriever.fetchSongs(unknownSongs)
                 .thenApply(retrievedSongs -> {
+                    songRepository.saveAll(retrievedSongs);
                     returningSongs.addAll(retrievedSongs);
                     return Collections.unmodifiableList(returningSongs);
                 });

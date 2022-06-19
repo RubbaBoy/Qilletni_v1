@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import javax.persistence.Convert;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.awt.Color;
 import java.util.UUID;
 
@@ -41,6 +42,7 @@ public abstract class Component {
      *
      * @return If the component is ready to play
      */
+    @Transient
     public abstract boolean isInitialized();
 
     /**

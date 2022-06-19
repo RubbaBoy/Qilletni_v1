@@ -1,6 +1,7 @@
 package is.yarr.qilletni.database.repositories.components;
 
 import is.yarr.qilletni.components.Component;
+import is.yarr.qilletni.grpc.gen.request.ForLoopComponentResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -19,10 +20,19 @@ public class ComponentAggregatorRepository {
 
     private final List<BoardOwnedRepository<? extends Component, UUID>> boardOwnedRepositories;
 
-    public ComponentAggregatorRepository(FunctionComponentRepository functionComponentRepository, SongComponentRepository songComponentRepository) {
+    public ComponentAggregatorRepository(SongComponentRepository songComponentRepository,
+                                         ForComponentRepository forComponentRepository,
+                                         FunctionComponentRepository functionComponentRepository,
+                                         RawCollectionComponentRepository rawCollectionComponentRepository,
+                                         LastFmComponentRepository lastFmComponentRepository,
+                                         SpotifyComponentRepository spotifyComponentRepository) {
         this.boardOwnedRepositories = List.of(
+                songComponentRepository,
+                forComponentRepository,
                 functionComponentRepository,
-                songComponentRepository
+                rawCollectionComponentRepository,
+                lastFmComponentRepository,
+                spotifyComponentRepository
         );
 
         LOGGER.debug("Registered {} board-owned repositories", this.boardOwnedRepositories.size());
