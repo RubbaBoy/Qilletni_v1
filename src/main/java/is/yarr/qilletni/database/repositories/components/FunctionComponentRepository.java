@@ -4,6 +4,7 @@ import is.yarr.qilletni.components.FunctionComponent;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,7 @@ WHERE function_component.instance_id = ?1
 """, nativeQuery = true)
     @Override
     Optional<FunctionComponent> findComponentOwnedBy(UUID componentId, String ownerId);
+
+    @Override
+    List<FunctionComponent> findAllByBoardId(UUID boardId);
 }

@@ -3,6 +3,7 @@ package is.yarr.qilletni.database.repositories.components;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,12 @@ public interface BoardOwnedRepository<T, ID> extends CrudRepository<T, ID> {
      * @return The found component, if any
      */
     Optional<T> findComponentOwnedBy(UUID componentId, String ownerId);
+
+    /**
+     * Finds all components in the repository owned by the supplied board.
+     *
+     * @param boardId The board the components should be a part of
+     * @return All components owned by the board
+     */
+    List<T> findAllByBoardId(UUID boardId);
 }
