@@ -20,11 +20,15 @@ message Playlist {
 }
 
 message Artist {
-  // TODO: Artist
+  string id = 1;
+  string name = 2;
+  string artwork_url = 3;
 }
 
 message Album {
-  // TODO: Album
+  string id = 1;
+  string name = 2;
+  string artwork_url = 3;
 }
 
 message YearRange {

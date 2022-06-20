@@ -1,4 +1,4 @@
-package is.yarr.qilletni.grpc.events.components.request;
+package is.yarr.qilletni.grpc.events.components.request.mapper;
 
 import is.yarr.qilletni.components.Component;
 import is.yarr.qilletni.components.ForComponent;

@@ -1,10 +1,11 @@
 syntax = "proto3";
 import "events/component/request/rpc_mapping.proto";
+import "events/component/component_events.proto";
 
 option java_multiple_files = true;
 option java_package = "is.yarr.qilletni.grpc.gen.request";
 
-service SpotifyComponentDataService {
+service SpotifyComponentDataRequestService {
   rpc RequestSpotifyComponentData(SpotifyComponentDataRequestEvent) returns (SpotifyComponentDataResponse);
 }
 
@@ -13,11 +14,12 @@ message SpotifyComponentDataRequestEvent {
 }
 
 message SpotifyComponentDataResponse {
+  optional ResponseError error = 1;
   oneof spotifyData {
-    SpotifyAlbumDataResponse album_data = 1;
-    SpotifyArtistDataResponse artist_data = 2;
-    SpotifyPlaylistDataResponse playlist_data = 3;
-    SpotifySearchDataResponse search_data = 4;
+    SpotifyAlbumDataResponse album_data = 2;
+    SpotifyArtistDataResponse artist_data = 3;
+    SpotifyPlaylistDataResponse playlist_data = 4;
+    SpotifySearchDataResponse search_data = 5;
   }
 }
 

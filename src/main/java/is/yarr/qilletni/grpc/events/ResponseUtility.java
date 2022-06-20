@@ -21,6 +21,19 @@ public class ResponseUtility {
     }
 
     /**
+     * Creates a {@link ResponseError} to be set into a gRPC response with a thrown {@link Throwable}.
+     *
+     * @param throwable The {@link Throwable} to include in the error
+     * @return The created {@link ResponseError}
+     */
+    public static ResponseError createErrorFromThrowable(Throwable throwable) {
+        return ResponseError.newBuilder()
+                .setMessage(throwable.getMessage())
+                .setCode(500)
+                .build();
+    }
+
+    /**
      * Sends an {@link EmptyResponse} with an {@link ResponseError} populated with the given parameters, used for quick
      * sending of errors. The response remains open after this method.
      *

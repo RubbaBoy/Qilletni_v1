@@ -4,6 +4,7 @@ import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.database.repositories.BoardRepository;
 import is.yarr.qilletni.database.repositories.components.ComponentAggregatorRepository;
 import is.yarr.qilletni.grpc.events.ResponseUtility;
+import is.yarr.qilletni.grpc.events.components.request.mapper.ComponentGRPCMapper;
 import is.yarr.qilletni.grpc.gen.request.ComponentRequestServiceGrpc;
 import is.yarr.qilletni.grpc.gen.request.StructureRequestEvent;
 import is.yarr.qilletni.grpc.gen.request.StructureResponse;
@@ -34,7 +35,7 @@ public class ComponentRequestService extends ComponentRequestServiceGrpc.Compone
 
     @Override
     @Secured({GENERAL})
-    public void retrieve(StructureRequestEvent request, StreamObserver<StructureResponse> responseObserver) {
+    public void requestStructure(StructureRequestEvent request, StreamObserver<StructureResponse> responseObserver) {
         var userInfo = UserSessionSecurityContext.getCurrentUserInfo();
         var boardId = UUID.fromString(request.getBoardId());
 
@@ -47,16 +48,19 @@ public class ComponentRequestService extends ComponentRequestServiceGrpc.Compone
 
         componentAggregatorRepository.getComponentsFromBoard(boardId)
                 .thenCompose(componentGRPCMapper::createBaseResponses)
-                .thenAccept(componentResponses -> {
-                    responseObserver.onNext(StructureResponse.newBuilder()
-                            .addAllComponents(componentResponses)
-                            .build());
+                .thenAccept(componentResponses ->
+                        responseObserver.onNext(StructureResponse.newBuilder()
+                                .addAllComponents(componentResponses)
+                                .build()))
+                .whenComplete(($, throwable) -> {
+                    if (throwable != null) {
+                        LOGGER.error("An exception occurred while retrieving components", throwable);
+
+                        responseObserver.onNext(StructureResponse.newBuilder()
+                                .setError(ResponseUtility.createErrorFromThrowable(throwable)).build());
+                    }
 
                     responseObserver.onCompleted();
-                }).exceptionally(throwable -> {
-                    LOGGER.error("An exception occurred while retrieving components", throwable);
-                    responseObserver.onCompleted();
-                    return null;
                 });
     }
 }

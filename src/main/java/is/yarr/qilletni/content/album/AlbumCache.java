@@ -2,6 +2,7 @@ package is.yarr.qilletni.content.album;
 
 import is.yarr.qilletni.music.Album;
 import is.yarr.qilletni.music.AlbumId;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -30,4 +31,17 @@ public interface AlbumCache {
      */
     CompletableFuture<List<Album>> getAlbums(List<AlbumId> albumIds);
 
+    @Service
+    class Stub implements AlbumCache {
+
+        @Override
+        public CompletableFuture<Album> getAlbum(AlbumId albumId) {
+            throw new UnsupportedOperationException("Not implemented");
+        }
+
+        @Override
+        public CompletableFuture<List<Album>> getAlbums(List<AlbumId> albumIds) {
+            throw new UnsupportedOperationException("Not implemented");
+        }
+    }
 }

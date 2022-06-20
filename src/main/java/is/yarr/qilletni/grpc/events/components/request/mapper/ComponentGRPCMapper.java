@@ -1,10 +1,8 @@
-package is.yarr.qilletni.grpc.events.components.request;
+package is.yarr.qilletni.grpc.events.components.request.mapper;
 
 import is.yarr.qilletni.components.Component;
 import is.yarr.qilletni.content.song.SongCache;
 import is.yarr.qilletni.grpc.gen.request.ComponentResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
