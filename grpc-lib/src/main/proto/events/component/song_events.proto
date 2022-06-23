@@ -15,5 +15,6 @@ message SongCreateEvent {
 }
 
 message SongChangeEvent {
-  string id = 1;
+  ModifyEvent modify = 1;
+  string song_id = 2;
 }
