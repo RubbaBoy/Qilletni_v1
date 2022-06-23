@@ -72,11 +72,10 @@ public class BoardRepository {
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
     public Board save(Board board) {
-        if (!(board instanceof BasicBoard)) {
-            throw new UnsupportedTypeException(board);
-        }
-
-        return basicBoardRepository.save((BasicBoard) board);
+        return switch (board) {
+            case BasicBoard basicBoard -> basicBoardRepository.save(basicBoard);
+            default -> throw new UnsupportedTypeException(board);
+        };
     }
 
     /**

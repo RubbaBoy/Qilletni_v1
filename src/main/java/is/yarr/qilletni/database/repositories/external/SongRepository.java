@@ -30,12 +30,11 @@ public class SongRepository {
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
     public Optional<Song> findById(SongId songId) {
-        if (!(songId instanceof SpotifySongId)) {
-            throw new UnsupportedTypeException(songId);
-        }
-
-        return spotifySongRepository.findById(songId.id())
-                .map(Song.class::cast);
+        return switch (songId) {
+            case SpotifySongId spotifySongId -> spotifySongRepository.findById(songId.id())
+                    .map(Song.class::cast);
+            default -> throw new UnsupportedTypeException(songId);
+        };
     }
 
     /**
@@ -46,11 +45,10 @@ public class SongRepository {
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
     public Song save(Song song) {
-        if (!(song instanceof SpotifySong spotifySong)) {
-            throw new UnsupportedTypeException(song);
-        }
-
-        return spotifySongRepository.save(spotifySong);
+        return switch (song) {
+            case SpotifySong spotifySong -> spotifySongRepository.save(spotifySong);
+            default -> throw new UnsupportedTypeException(song);
+        };
     }
 
     /**
