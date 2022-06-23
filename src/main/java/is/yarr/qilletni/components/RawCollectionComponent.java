@@ -25,13 +25,14 @@ public class RawCollectionComponent extends Component {
      * Creates a base {@link Component} with a given instance ID.
      *
      * @param instanceId The instance ID
+     * @param boardId The ID of the {@link is.yarr.qilletni.board.Board} this component is a part of
      */
-    public RawCollectionComponent(UUID instanceId) {
-        super(instanceId);
+    public RawCollectionComponent(UUID instanceId, UUID boardId) {
+        super(instanceId, boardId);
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return songs != null;
     }
 

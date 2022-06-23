@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "events/component/component_events.proto";
+import "events/component/request/rpc_mapping.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.spotify";
+
+service SpotifyService {
+  rpc Create(SpotifyCreateEvent) returns (CreateComponentResponse);
+  rpc ChangeSequential(SpotifySequentialChangeEvent) returns (EmptyResponse);
+  rpc ChangeLimit(SpotifyLimitChangeEvent) returns (EmptyResponse);
+  rpc ChangeType(SpotifyTypeChangeEvent) returns (EmptyResponse);
+  rpc ChangeData(SpotifyDataChangeEvent) returns (EmptyResponse);
+  rpc ChangeYearRange(SpotifyYearRangeChangeEvent) returns (EmptyResponse);
+  rpc ChangeYear(SpotifyYearChangeEvent) returns (EmptyResponse);
+  rpc ChangeGenre(SpotifyGenreChangeEvent) returns (EmptyResponse);
+}
+
+message SpotifyCreateEvent {
+  CreateEvent create = 1;
+}
+
+message SpotifySequentialChangeEvent {
+  ModifyEvent modify = 1;
+  bool sequential = 2;
+}
+
+message SpotifyLimitChangeEvent {
+  ModifyEvent modify = 1;
+  optional int32 limit = 2;
+}
+
+message SpotifyTypeChangeEvent {
+  ModifyEvent modify = 1;
+  SpotifyCollectionType collection_type = 2;
+}
+
+message SpotifyDataChangeEvent {
+  ModifyEvent modify = 1;
+  string lookup_data = 2;
+}
+
+message SpotifyYearRangeChangeEvent {
+  ModifyEvent modify = 1;
+  optional YearRange year_range = 2;
+}
+
+message SpotifyYearChangeEvent {
+  ModifyEvent modify = 1;
+  optional int32 year_range = 2;
+}
+
+message SpotifyGenreChangeEvent {
+  ModifyEvent modify = 1;
+  optional string genre = 2;
+}

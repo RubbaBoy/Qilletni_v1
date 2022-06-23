@@ -24,13 +24,14 @@ public class ForComponent extends Component {
      * Creates a base {@link Component} with a given instance ID.
      *
      * @param instanceId The instance ID
+     * @param boardId The ID of the {@link is.yarr.qilletni.board.Board} this component is a part of
      */
-    public ForComponent(UUID instanceId) {
-        super(instanceId);
+    public ForComponent(UUID instanceId, UUID boardId) {
+        super(instanceId, boardId);
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return children != null && loopStrategy.isLoopValid(this);
     }
 
@@ -156,7 +157,7 @@ public class ForComponent extends Component {
     /**
      * The strategy to stop the loop.
      */
-    enum LoopStrategy {
+    public enum LoopStrategy {
 
         /**
          * The loop will never stop.

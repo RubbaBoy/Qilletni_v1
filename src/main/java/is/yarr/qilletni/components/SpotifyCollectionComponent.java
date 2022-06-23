@@ -29,13 +29,14 @@ public class SpotifyCollectionComponent extends Component {
      * Creates a {@link SpotifyCollectionComponent} with a given instance ID.
      *
      * @param instanceId The instance ID
+     * @param boardId The ID of the {@link is.yarr.qilletni.board.Board} this component is a part of
      */
-    public SpotifyCollectionComponent(UUID instanceId) {
-        super(instanceId);
+    public SpotifyCollectionComponent(UUID instanceId, UUID boardId) {
+        super(instanceId, boardId);
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return collectionData != null && collectionData.isInitialized();
     }
 
@@ -63,7 +64,7 @@ public class SpotifyCollectionComponent extends Component {
 
     /**
      * Checks if the {@link SpotifyCollectionType} allows for shuffling. This might be unavailable for things like
-     * radios in the future. If this component isn't initialized (checked via {@link #isInitialized()}), this method
+     * radios in the future. If this component isn't initialized (checked via {@link Component#isInitialized()}), this method
      * will always return {@code false}.
      *
      * @return If shuffling is supported

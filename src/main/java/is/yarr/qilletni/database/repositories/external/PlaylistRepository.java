@@ -1,5 +1,6 @@
 package is.yarr.qilletni.database.repositories.external;
 
+import is.yarr.qilletni.database.UnsupportedTypeException;
 import is.yarr.qilletni.music.Playlist;
 import is.yarr.qilletni.music.PlaylistId;
 import is.yarr.qilletni.music.SpotifyPlaylist;
@@ -28,12 +29,11 @@ public class PlaylistRepository {
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
     public Optional<Playlist> findById(PlaylistId playlistId) {
-        if (!(playlistId instanceof SpotifyPlaylistId)) {
-            throw new UnsupportedTypeException(playlistId);
-        }
-
-        return spotifyPlaylistRepository.findById(playlistId.id())
-                .map(Playlist.class::cast);
+        return switch (playlistId) {
+            case SpotifyPlaylistId spotifyPlaylistId -> spotifyPlaylistRepository.findById(playlistId.id())
+                    .map(Playlist.class::cast);
+            default -> throw new UnsupportedTypeException(playlistId);
+        };
     }
 
     /**
@@ -44,10 +44,9 @@ public class PlaylistRepository {
      * @throws UnsupportedTypeException If a repository for the given type is not found
      */
     public Playlist save(Playlist playlist) {
-        if (!(playlist instanceof SpotifyPlaylist)) {
-            throw new UnsupportedTypeException(playlist);
-        }
-
-        return spotifyPlaylistRepository.save((SpotifyPlaylist) playlist);
+        return switch (playlist) {
+            case SpotifyPlaylist spotifyPlaylist -> spotifyPlaylistRepository.save(spotifyPlaylist);
+            default -> throw new UnsupportedTypeException(playlist);
+        };
     }
 }

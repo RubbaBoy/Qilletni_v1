@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "events/component/component_events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.song";
+
+service SongService {
+  rpc Create(SongCreateEvent) returns (CreateComponentResponse);
+  rpc ChangeSong(SongChangeEvent) returns (EmptyResponse);
+}
+
+message SongCreateEvent {
+  CreateEvent create = 1;
+}
+
+message SongChangeEvent {
+  string id = 1;
+}

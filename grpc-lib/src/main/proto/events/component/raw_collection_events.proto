@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "events/component/component_events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.rawcollection";
+
+service RawCollectionService {
+  rpc Create(RawCollectionCreateEvent) returns (CreateComponentResponse);
+  rpc ChangeSequential(RawCollectionSequentialChangeEvent) returns (EmptyResponse);
+  rpc ChangeSongs(RawCollectionSongsChangeEvent) returns (EmptyResponse);
+}
+
+message RawCollectionCreateEvent {
+  CreateEvent create = 1;
+}
+
+message RawCollectionSequentialChangeEvent {
+  ModifyEvent modify = 1;
+  bool sequential = 2;
+}
+
+message RawCollectionSongsChangeEvent {
+  ModifyEvent modify = 1;
+  repeated string song_ids = 2;
+}

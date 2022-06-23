@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "events/component/component_events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.function";
+
+service FunctionService {
+  rpc Create(FunctionCreateEvent) returns (CreateComponentResponse);
+  rpc ChangeChildren(FunctionChangeChildrenEvent) returns (EmptyResponse);
+  rpc ChangeName(FunctionNameChangeEvent) returns (EmptyResponse);
+}
+
+message FunctionCreateEvent {
+  CreateEvent create = 1;
+}
+
+message FunctionChangeChildrenEvent {
+  ModifyEvent modify = 1;
+  repeated bytes children = 2;
+}
+
+message FunctionNameChangeEvent {
+  ModifyEvent modify = 1;
+  string name = 2;
+}

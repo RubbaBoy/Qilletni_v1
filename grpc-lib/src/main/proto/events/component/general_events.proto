@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "events/component/component_events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.general";
+
+service GeneralService {
+  rpc Delete(DeleteEvent) returns (EmptyResponse);
+  rpc Recolor(RecolorEvent) returns (EmptyResponse);
+}
+
+message DeleteEvent {
+  string component_id = 1;
+}
+
+message RecolorEvent {
+  ModifyEvent modify = 1;
+  int32 color = 2;
+}

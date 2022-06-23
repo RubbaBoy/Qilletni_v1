@@ -1,11 +1,13 @@
 package is.yarr.qilletni.components;
 
+import is.yarr.qilletni.board.Board;
 import is.yarr.qilletni.database.converters.ColorConverter;
 
 import javax.annotation.Nullable;
 import javax.persistence.Convert;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.awt.Color;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public abstract class Component {
 
     @Id
     private UUID instanceId;
+    private UUID boardId;
 
     @Convert(converter = ColorConverter.class)
     private Color color;
@@ -28,8 +31,9 @@ public abstract class Component {
      *
      * @param instanceId The instance ID
      */
-    protected Component(UUID instanceId) {
+    protected Component(UUID instanceId, UUID boardId) {
         this.instanceId = instanceId;
+        this.boardId = boardId;
     }
 
     /**
@@ -38,7 +42,8 @@ public abstract class Component {
      *
      * @return If the component is ready to play
      */
-    abstract boolean isInitialized();
+    @Transient
+    public abstract boolean isInitialized();
 
     /**
      * Gets the unique identifier of the Component instance.
@@ -47,6 +52,15 @@ public abstract class Component {
      */
     public UUID getInstanceId() {
         return instanceId;
+    }
+
+    /**
+     * Gets the {@link Board} ID that this component is a part of.
+     *
+     * @return The board ID
+     */
+    public UUID getBoardId() {
+        return boardId;
     }
 
     /**

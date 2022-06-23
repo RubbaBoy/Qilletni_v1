@@ -2,6 +2,8 @@ package is.yarr.qilletni.components;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ public class FunctionComponent extends Component {
 
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<UUID> children;
 
     protected FunctionComponent() {}
@@ -22,13 +24,14 @@ public class FunctionComponent extends Component {
      * Creates a base {@link Component} with a given instance ID.
      *
      * @param instanceId The instance ID
+     * @param boardId The ID of the {@link is.yarr.qilletni.board.Board} this component is a part of
      */
-    public FunctionComponent(UUID instanceId) {
-        super(instanceId);
+    public FunctionComponent(UUID instanceId, UUID boardId) {
+        super(instanceId, boardId);
     }
 
     @Override
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return name != null && children != null;
     }
 
@@ -65,6 +68,6 @@ public class FunctionComponent extends Component {
      * @param children The childrens' IDs
      */
     public void setChildren(UUID[] children) {
-        this.children = List.of(children);
+        this.children = new ArrayList<>(List.of(children));
     }
 }

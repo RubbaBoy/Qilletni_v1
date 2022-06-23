@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen";
+option java_outer_classname = "ComponentEventsProto";
+
+// The greeting service definition.
+service Simple {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {
+  }
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+
+  message Inner {
+    int32 age = 2;
+  }
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+
+
+
+message ResponseError {
+  string message = 1;
+  int32 code = 2;
+}
+
+message EmptyResponse {
+  optional ResponseError error = 1;
+}
+
+message CreateComponentResponse {
+  optional ResponseError error = 1;
+  string component_id = 2;
+}
+
+message ModifyEvent {
+  string component_id = 1;
+}
+
+message CreateEvent {
+  string board_id = 1;
+}

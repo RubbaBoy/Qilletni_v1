@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "events/component/component_events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.events.component.forloop";
+
+service ForLoopService {
+  rpc Create(ForLoopCreateEvent) returns (CreateComponentResponse);
+  rpc ChangeChildren(ForLoopChildrenChangeEvent) returns (EmptyResponse);
+  rpc ChangeIterations(ForLoopIterationsChangeEvent) returns (EmptyResponse);
+  rpc ChangeDuration(ForLoopDurationChangeEvent) returns (EmptyResponse);
+  rpc ChangeAbsTime(ForLoopAbsTimeChangeEvent) returns (EmptyResponse);
+}
+
+message ForLoopCreateEvent {
+  CreateEvent create = 1;
+}
+
+message ForLoopChildrenChangeEvent {
+  ModifyEvent modify = 1;
+  repeated bytes children = 2;
+}
+
+message ForLoopIterationsChangeEvent {
+  ModifyEvent modify = 1;
+  optional int32 iterations = 2;
+}
+
+message ForLoopDurationChangeEvent {
+  ModifyEvent modify = 1;
+  optional int32 duration = 2;
+}
+
+message ForLoopAbsTimeChangeEvent {
+  ModifyEvent modify = 1;
+  optional int64 abs_time = 2;
+}
