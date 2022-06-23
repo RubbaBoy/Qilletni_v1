@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.UUID;
 
+/**
+ * The basic form of a board.
+ */
 @Entity(name = "boards")
 public class BasicBoard implements Board {
 
