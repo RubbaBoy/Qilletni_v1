@@ -2,12 +2,15 @@ package is.yarr.qilletni.grpc.events;
 
 import io.grpc.stub.StreamObserver;
 import is.yarr.qilletni.board.BasicBoard;
+import is.yarr.qilletni.board.Board;
 import is.yarr.qilletni.database.repositories.BoardRepository;
 import is.yarr.qilletni.grpc.gen.EmptyResponse;
 import is.yarr.qilletni.grpc.gen.request.BoardCreateEvent;
 import is.yarr.qilletni.grpc.gen.request.BoardCreateResponse;
 import is.yarr.qilletni.grpc.gen.request.BoardNameChangeEvent;
 import is.yarr.qilletni.grpc.gen.request.BoardServiceGrpc;
+import is.yarr.qilletni.grpc.gen.request.BoardsRequestEvent;
+import is.yarr.qilletni.grpc.gen.request.BoardsRequestResponse;
 import is.yarr.qilletni.grpc.security.UserSessionAuthenticationToken;
 import is.yarr.qilletni.grpc.security.UserSessionSecurityContext;
 import is.yarr.qilletni.user.UserInfo;
@@ -16,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -84,6 +88,30 @@ public class BoardService extends BoardServiceGrpc.BoardServiceImplBase {
                             ResponseUtility.sendEmpty(responseObserver);
                         }, () -> ResponseUtility.sendError(responseObserver, "No board found with the ID of: " + boardId, 404)))
                 .thenRun(responseObserver::onCompleted);
+    }
+
+    @Override
+    @Secured({GENERAL})
+    public void requestBoards(BoardsRequestEvent request, StreamObserver<BoardsRequestResponse> responseObserver) {
+        var userInfo = UserSessionSecurityContext.getCurrentUserInfo();
+
+        boardRepository.getBoardsFromOwnerAsync(userInfo.getId())
+                .thenAccept(boards -> {
+                    LOGGER.debug("Found {} boards for {}", boards.size(), userInfo.getId());
+
+                    responseObserver.onNext(BoardsRequestResponse.newBuilder()
+                            .addAllBoards(boards.stream().map(this::convertBoardToGRPC).toList())
+                            .build());
+                })
+                .thenRun(responseObserver::onCompleted);
+    }
+
+    private is.yarr.qilletni.grpc.gen.request.Board convertBoardToGRPC(Board board) {
+        return is.yarr.qilletni.grpc.gen.request.Board.newBuilder()
+                .setId(board.getId().toString())
+                .setName(board.getName())
+                .setOwnerId(board.getOwnerId())
+                .build();
     }
 
     private boolean isValidName(String name) {

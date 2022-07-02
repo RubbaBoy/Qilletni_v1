@@ -8,6 +8,7 @@ option java_package = "is.yarr.qilletni.grpc.gen.request";
 service BoardService {
   rpc Create(BoardCreateEvent) returns (BoardCreateResponse);
   rpc ChangeName(BoardNameChangeEvent) returns (EmptyResponse);
+  rpc RequestBoards(BoardsRequestEvent) returns (BoardsRequestResponse);
 }
 
 message BoardCreateEvent {
@@ -26,4 +27,10 @@ message BoardModifyEvent {
 message BoardNameChangeEvent {
   BoardModifyEvent modify = 1;
   string name = 2;
+}
+
+message BoardsRequestEvent {}
+
+message BoardsRequestResponse {
+  repeated Board boards = 1;
 }

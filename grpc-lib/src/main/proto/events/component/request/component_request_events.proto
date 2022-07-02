@@ -51,7 +51,7 @@ message ForLoopComponentResponse {
 
 message FunctionComponentResponse {
   string name = 1;
-  repeated ComponentResponse children = 2 ;
+  repeated ComponentResponse children = 2;
 }
 
 message RawCollectionComponentResponse {

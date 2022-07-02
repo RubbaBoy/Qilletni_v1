@@ -48,8 +48,7 @@ public class ForLoopService extends ForLoopServiceGrpc.ForLoopServiceImplBase {
         repositoryInterfacer.getComponent(componentId, userInfo.getId(), responseObserver, forComponent -> {
             var childrenIdArray = request.getChildrenList()
                     .stream()
-                    .map(ByteString::toByteArray)
-                    .map(UUIDUtils::convertBytesToUUID)
+                    .map(UUID::fromString)
                     .toArray(UUID[]::new);
 
             forComponent.setChildren(childrenIdArray);

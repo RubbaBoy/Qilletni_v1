@@ -2,6 +2,7 @@ server:
   port: ${HTTP_PORT}
   servlet:
     context-path: ""
+  address: "0.0.0.0"
 grpc:
   server:
     port: ${GRPC_PORT}

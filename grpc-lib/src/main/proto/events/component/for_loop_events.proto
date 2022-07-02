@@ -19,7 +19,7 @@ message ForLoopCreateEvent {
 
 message ForLoopChildrenChangeEvent {
   ModifyEvent modify = 1;
-  repeated bytes children = 2;
+  repeated string children = 2;
 }
 
 message ForLoopIterationsChangeEvent {
@@ -34,5 +34,5 @@ message ForLoopDurationChangeEvent {
 
 message ForLoopAbsTimeChangeEvent {
   ModifyEvent modify = 1;
-  optional int64 abs_time = 2;
+  optional int32 abs_time = 2;
 }

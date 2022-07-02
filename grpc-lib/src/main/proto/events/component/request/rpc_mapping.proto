@@ -31,6 +31,12 @@ message Album {
   string artwork_url = 3;
 }
 
+message Board {
+  string id = 1;
+  string name = 2;
+  string owner_id = 3;
+}
+
 message YearRange {
   int32 start_year = 1;
   int32 end_year = 2;
@@ -57,15 +63,15 @@ enum LoopStrategy {
 }
 
 enum LastFmCollectionType {
-    TOP_TRACKS = 0;
-    LOVED_TRACKS = 1;
-    TOP_ARTIST = 2;
-    TOP_ALBUM = 3;
+  TOP_TRACKS = 0;
+  LOVED_TRACKS = 1;
+  TOP_ARTIST = 2;
+  TOP_ALBUM = 3;
 }
 
 enum SpotifyCollectionType {
-    PLAYLIST = 0;
-    ARTIST = 1;
-    ALBUM = 2;
-    SEARCH = 3;
+  PLAYLIST = 0;
+  ARTIST = 1;
+  ALBUM = 2;
+  SEARCH = 3;
 }

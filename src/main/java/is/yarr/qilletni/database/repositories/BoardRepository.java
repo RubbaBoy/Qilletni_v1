@@ -6,6 +6,7 @@ import is.yarr.qilletni.database.UnsupportedTypeException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -60,8 +61,32 @@ public class BoardRepository {
      * @param ownerId The ID of the owner of the board
      * @return The found board, if any
      */
+    @Async
     public CompletableFuture<Optional<Board>> getBoardAsync(UUID boardId, String ownerId) {
         return CompletableFuture.completedFuture(getBoard(boardId, ownerId));
+    }
+
+    /**
+     * Finds all {@link Board}s owned by the given user ID.
+     *
+     * @param ownerId The ID of the owner
+     * @return The found boards
+     */
+    public List<Board> getBoardsFromOwner(String ownerId) {
+        return basicBoardRepository.findAllByOwnerId(ownerId)
+                .stream().map(Board.class::cast)
+                .toList();
+    }
+
+    /**
+     * Asynchronously finds all {@link Board}s owned by the given user ID.
+     *
+     * @param ownerId The ID of the owner
+     * @return The found boards
+     */
+    @Async
+    public CompletableFuture<List<Board>> getBoardsFromOwnerAsync(String ownerId) {
+        return CompletableFuture.completedFuture(getBoardsFromOwner(ownerId));
     }
 
     /**
