@@ -150,9 +150,24 @@ public class TestEndpoint {
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
+    @GetMapping("/me")
+    public CompletableFuture<ResponseEntity<?>> me(@Param("session") String session) {
+        System.out.println("sessionId = " + session);
+        return sessionHandler.getUserInfo(UUID.fromString(session))
+                .thenApply(optionalInfo -> {
+                    if (optionalInfo.isEmpty()) {
+                        return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+                    }
+
+                    return new ResponseEntity<>(optionalInfo.get(), HttpStatus.OK);
+                });
+    }
+
     @GetMapping("/login")
     public ResponseEntity<?> login() {
-        return new ResponseEntity<>(new MultiValueMapAdapter<>(Map.of("Location", List.of(authHandler.beginAuth().toString()))), HttpStatus.PERMANENT_REDIRECT);
+        var begin = authHandler.beginAuth().toString();
+        LOGGER.info("begin = {}", begin);
+        return new ResponseEntity<>(begin, HttpStatus.OK);
     }
 
     @GetMapping("/redirect")
@@ -170,7 +185,8 @@ public class TestEndpoint {
 
 //                    userSession.getSessionId()
 //                            return new ResponseEntity<>(new MultiValueMapAdapter<>(Map.of("Set-Cookie", List.of("session="))), HttpStatus.OK);
-                    return new ResponseEntity<>("Hello " + userSession.getUserInfo().getName(), HttpStatus.OK);
+//                    return new ResponseEntity<>(userSession, HttpStatus.OK);
+                    return new ResponseEntity<>(new MultiValueMapAdapter<>(Map.of("Location", List.of("qilletni://auth?sessionId=" + userSession.getSessionId()))), HttpStatus.PERMANENT_REDIRECT);
                 });
     }
 

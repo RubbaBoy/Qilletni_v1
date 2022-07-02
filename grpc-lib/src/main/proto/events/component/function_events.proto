@@ -17,7 +17,7 @@ message FunctionCreateEvent {
 
 message FunctionChangeChildrenEvent {
   ModifyEvent modify = 1;
-  repeated bytes children = 2;
+  repeated string children = 2;
 }
 
 message FunctionNameChangeEvent {

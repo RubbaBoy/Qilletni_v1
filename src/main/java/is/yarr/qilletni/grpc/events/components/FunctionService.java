@@ -48,8 +48,7 @@ public class FunctionService extends FunctionServiceGrpc.FunctionServiceImplBase
         repositoryInterfacer.getComponent(componentId, userInfo.getId(), responseObserver, functionComponent -> {
             var childrenIdArray = request.getChildrenList()
                     .stream()
-                    .map(ByteString::toByteArray)
-                    .map(UUIDUtils::convertBytesToUUID)
+                    .map(UUID::fromString)
                     .toArray(UUID[]::new);
 
             functionComponent.setChildren(childrenIdArray);

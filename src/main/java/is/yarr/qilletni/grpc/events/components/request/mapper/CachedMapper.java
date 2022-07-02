@@ -243,7 +243,12 @@ public class CachedMapper {
      */
     private List<ComponentResponse> createChildren(UUID[] childrenIds) {
         return Arrays.stream(childrenIds)
-                .map(componentMap::get)
+                .map(key -> {
+                    var got = componentMap.get(key);
+                    System.out.println("componentMap = " + componentMap);
+                    LOGGER.debug("Getting {}: {}", key, got);
+                    return got;
+                })
                 .map(this::createComponentResponse).toList();
     }
 
