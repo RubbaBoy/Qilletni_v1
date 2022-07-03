@@ -7,6 +7,7 @@ import is.yarr.qilletni.grpc.events.components.request.mapper.SpotifyDataGRPCMap
 import is.yarr.qilletni.grpc.gen.request.SpotifyComponentDataRequestEvent;
 import is.yarr.qilletni.grpc.gen.request.SpotifyComponentDataRequestServiceGrpc;
 import is.yarr.qilletni.grpc.gen.request.SpotifyComponentDataResponse;
+import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySongResponse;
 import is.yarr.qilletni.grpc.security.UserSessionSecurityContext;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
@@ -55,15 +56,7 @@ public class SpotifyComponentDataRequestService extends SpotifyComponentDataRequ
 
         spotifyDataGRPCMapper.createResponseFromData(spotifyDataOptional.get())
                 .thenAccept(responseObserver::onNext)
-                .whenComplete(($, throwable) -> {
-                    if (throwable != null) {
-                        LOGGER.error("An exception occurred while retrieving components", throwable);
-
-                        responseObserver.onNext(SpotifyComponentDataResponse.newBuilder()
-                                .setError(ResponseUtility.createErrorFromThrowable(throwable)).build());
-                    }
-
-                    responseObserver.onCompleted();
-                });
+                .whenComplete(($, throwable) -> ResponseUtility.terminallyReportError(throwable, responseObserver, "An exception occurred while retrieving Spotify component data",
+                        responseError -> SpotifyComponentDataResponse.newBuilder().setError(responseError).build()));
     }
 }

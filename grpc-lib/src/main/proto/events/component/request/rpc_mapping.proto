@@ -15,8 +15,7 @@ message Playlist {
   string name = 2;
   string owner = 3;
   string artwork_url = 4;
-  int32 followers = 5;
-  string description = 6;
+  int32 size = 5;
 }
 
 message Artist {

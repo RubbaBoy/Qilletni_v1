@@ -7,6 +7,7 @@ import is.yarr.qilletni.components.spotify.SpotifyPlaylistData;
 import is.yarr.qilletni.content.album.AlbumCache;
 import is.yarr.qilletni.content.artist.ArtistCache;
 import is.yarr.qilletni.content.playlist.PlaylistCache;
+import is.yarr.qilletni.grpc.GRPCEntityFactory;
 import is.yarr.qilletni.grpc.gen.request.Album;
 import is.yarr.qilletni.grpc.gen.request.Artist;
 import is.yarr.qilletni.grpc.gen.request.Playlist;
@@ -62,7 +63,7 @@ public class SpotifyDataGRPCMapper {
      */
     private SpotifyAlbumDataResponse createAlbumResponse(SpotifyAlbumData albumData) {
         return SpotifyAlbumDataResponse.newBuilder()
-                .setAlbum(createGRPCAlbum(albumData.getAlbumId()))
+                .setAlbum(createGRPCAlbumFromId(albumData.getAlbumId()))
                 .build();
     }
 
@@ -74,7 +75,7 @@ public class SpotifyDataGRPCMapper {
      */
     private SpotifyArtistDataResponse createArtistResponse(SpotifyArtistData artistData) {
         return SpotifyArtistDataResponse.newBuilder()
-                .setArtist(createGRPCArtist(artistData.getArtistId()))
+                .setArtist(createGRPCArtistFromId(artistData.getArtistId()))
                 .build();
     }
 
@@ -86,7 +87,7 @@ public class SpotifyDataGRPCMapper {
      */
     private SpotifyPlaylistDataResponse createPlaylistResponse(SpotifyPlaylistData playlistData) {
         return SpotifyPlaylistDataResponse.newBuilder()
-                .setPlaylist(createGRPCPlaylist(playlistData.getPlaylistId()))
+                .setPlaylist(createGRPCPlaylistFromId(playlistData.getPlaylistId()))
                 .build();
     }
 
@@ -108,13 +109,9 @@ public class SpotifyDataGRPCMapper {
      * @param albumId The album ID to look up
      * @return The created {@link Album}
      */
-    private Album createGRPCAlbum(AlbumId albumId) {
-        var albumEntity = albumCache.getAlbum(albumId).join();
-        return Album.newBuilder()
-                .setId(albumEntity.getId())
-                .setName(albumEntity.getName())
-                .setArtworkUrl(albumEntity.getArtworkUrl())
-                .build();
+    private Album createGRPCAlbumFromId(AlbumId albumId) {
+        var cachedAlbum = albumCache.getAlbum(albumId).join();
+        return GRPCEntityFactory.createGRPCAlbum(cachedAlbum);
     }
 
     /**
@@ -123,13 +120,9 @@ public class SpotifyDataGRPCMapper {
      * @param artistId The artist ID to look up
      * @return The created {@link Artist}
      */
-    private Artist createGRPCArtist(ArtistId artistId) {
-        var artistEntity = artistCache.getArtist(artistId).join();
-        return Artist.newBuilder()
-                .setId(artistEntity.getId())
-                .setName(artistEntity.getName())
-                .setArtworkUrl(artistEntity.getArtworkUrl())
-                .build();
+    private Artist createGRPCArtistFromId(ArtistId artistId) {
+        var cachedArtist = artistCache.getArtist(artistId).join();
+        return GRPCEntityFactory.createGRPCArtist(cachedArtist);
     }
 
     /**
@@ -139,16 +132,9 @@ public class SpotifyDataGRPCMapper {
      * @param playlistId The playlist ID to look up
      * @return The created {@link Playlist}
      */
-    private Playlist createGRPCPlaylist(PlaylistId playlistId) {
-        var playlistEntity = playlistCache.getPlaylist(playlistId).join();
-        return Playlist.newBuilder()
-                .setId(playlistEntity.getId())
-                .setName(playlistEntity.getName())
-                .setOwner(playlistEntity.getOwner())
-                .setArtworkUrl(playlistEntity.getArtworkUrl())
-                .setFollowers(playlistEntity.getFollowers())
-                .setDescription(playlistEntity.getDescription())
-                .build();
+    private Playlist createGRPCPlaylistFromId(PlaylistId playlistId) {
+        var cachedPlaylist = playlistCache.getPlaylist(playlistId).join();
+        return GRPCEntityFactory.createGRPCPlaylist(cachedPlaylist);
     }
 
     /**

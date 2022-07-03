@@ -8,6 +8,7 @@ import is.yarr.qilletni.components.RawCollectionComponent;
 import is.yarr.qilletni.components.SongComponent;
 import is.yarr.qilletni.components.SpotifyCollectionComponent;
 import is.yarr.qilletni.content.song.SongCache;
+import is.yarr.qilletni.grpc.GRPCEntityFactory;
 import is.yarr.qilletni.grpc.gen.request.ComponentBase;
 import is.yarr.qilletni.grpc.gen.request.ComponentResponse;
 import is.yarr.qilletni.grpc.gen.request.ForLoopComponentResponse;
@@ -126,7 +127,7 @@ public class CachedMapper {
      */
     private ComponentResponse.Builder createSongResponse(ComponentResponse.Builder response, SongComponent component) {
         return response.setSong(SongComponentResponse.newBuilder()
-                .setSong(createGRPCSong(component.getSongId()))
+                .setSong(createGRPCSongFromId(component.getSongId()))
                 .build());
     }
 
@@ -176,7 +177,7 @@ public class CachedMapper {
     private ComponentResponse.Builder createRawCollectionResponse(ComponentResponse.Builder response, RawCollectionComponent component) {
         return response.setRawCollection(RawCollectionComponentResponse.newBuilder()
                 .setSequential(component.isSequential())
-                .addAllSongs(Arrays.stream(component.getSongs()).map(this::createGRPCSong).toList())
+                .addAllSongs(Arrays.stream(component.getSongs()).map(this::createGRPCSongFromId).toList())
                 .build());
     }
 
@@ -259,14 +260,9 @@ public class CachedMapper {
      * @param songId The ID of the song to convert
      * @return The {@link Song} with the cached data
      */
-    private Song createGRPCSong(SongId songId) {
+    private Song createGRPCSongFromId(SongId songId) {
         var cachedSong = songs.get(songId.id());
-        return Song.newBuilder()
-                .setId(cachedSong.getId())
-                .setName(cachedSong.getName())
-                .setArtist(cachedSong.getArtist())
-                .setArtworkUrl(cachedSong.getArtworkUrl())
-                .build();
+        return GRPCEntityFactory.createGRPCSong(cachedSong);
     }
 
     /**

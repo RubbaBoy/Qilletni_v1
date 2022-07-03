@@ -1,0 +1,39 @@
+syntax = "proto3";
+import "events/component/request/rpc_mapping.proto";
+import "events/component/component_events.proto";
+
+option java_multiple_files = true;
+option java_package = "is.yarr.qilletni.grpc.gen.search.spotify";
+
+service SpotifySearchService {
+  rpc SearchSongs(SpotifySearchQuery) returns (SpotifySongResponse);
+  rpc SearchPlaylists(SpotifySearchQuery) returns (SpotifyPlaylistResponse);
+  rpc SearchAlbums(SpotifySearchQuery) returns (SpotifyAlbumResponse);
+  rpc SearchArtists(SpotifySearchQuery) returns (SpotifyArtistResponse);
+}
+
+message SpotifySearchQuery {
+  string query = 1;
+  optional int32 limit = 2;
+  optional int32 offset = 3;
+}
+
+message SpotifySongResponse {
+  optional ResponseError error = 1;
+  repeated Song songs = 2;
+}
+
+message SpotifyPlaylistResponse {
+  optional ResponseError error = 1;
+  repeated Playlist playlists = 2;
+}
+
+message SpotifyAlbumResponse {
+  optional ResponseError error = 1;
+  repeated Album albums = 2;
+}
+
+message SpotifyArtistResponse {
+  optional ResponseError error = 1;
+  repeated Artist artists = 2;
+}

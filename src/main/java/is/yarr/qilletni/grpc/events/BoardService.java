@@ -50,6 +50,7 @@ public class BoardService extends BoardServiceGrpc.BoardServiceImplBase {
         if (!isValidName(boardName)) {
             responseObserver.onNext(BoardCreateResponse.newBuilder()
                     .setError(ResponseUtility.createError("Invalid name given", 400)).build());
+            responseObserver.onCompleted();
             return;
         }
 

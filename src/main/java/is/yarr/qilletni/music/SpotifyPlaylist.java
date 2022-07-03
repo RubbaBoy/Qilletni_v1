@@ -14,8 +14,7 @@ public class SpotifyPlaylist implements Playlist {
     private String name;
     private String owner;
     private String artworkUrl;
-    private int followers;
-    private String description;
+    private int size;
     private boolean isPublic;
 
     protected SpotifyPlaylist() {}
@@ -25,17 +24,15 @@ public class SpotifyPlaylist implements Playlist {
      * @param name        The playlist's name
      * @param owner       The owner of the playlist
      * @param artworkUrl  The direct artwork URL
-     * @param followers   The playlist's followers
-     * @param description The playlist's description
+     * @param size        The amount of songs in the playlist
      * @param isPublic    If the playlist is visible to the public
      */
-    public SpotifyPlaylist(String id, String name, String owner, String artworkUrl, int followers, String description, boolean isPublic) {
+    public SpotifyPlaylist(String id, String name, String owner, String artworkUrl, int size, boolean isPublic) {
         this.id = id;
         this.name = name;
         this.owner = owner;
         this.artworkUrl = artworkUrl;
-        this.followers = followers;
-        this.description = description;
+        this.size = size;
         this.isPublic = isPublic;
     }
 
@@ -60,13 +57,8 @@ public class SpotifyPlaylist implements Playlist {
     }
 
     @Override
-    public int getFollowers() {
-        return followers;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
+    public int getSize() {
+        return size;
     }
 
     @Override
@@ -81,8 +73,7 @@ public class SpotifyPlaylist implements Playlist {
                 "name=" + name + ", " +
                 "owner=" + owner + ", " +
                 "artworkUrl=" + artworkUrl + ", " +
-                "followers=" + followers + ", " +
-                "description=" + description + ", " +
+                "size=" + size + ", " +
                 "isPublic=" + isPublic + ']';
     }
 }
