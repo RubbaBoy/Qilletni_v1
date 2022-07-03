@@ -30,7 +30,7 @@ message SpotifyPlaylistResponse {
 
 message SpotifyAlbumResponse {
   optional ResponseError error = 1;
-  repeated Playlist playlists = 2;
+  repeated Album albums = 2;
 }
 
 message SpotifyArtistResponse {

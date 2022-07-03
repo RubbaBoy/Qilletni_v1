@@ -14,7 +14,7 @@ public class PlaylistFactory {
     /**
      * Creates a Qilletni {@link Playlist} from a Spotify API {@link se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified}.
      *
-     * @param spotifyPlaylist The {@link se.michaelthelin.spotify.model_objects.specification.Playlist} from an API call
+     * @param spotifyPlaylist The {@link se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified} from an API call
      * @return The created {@link Playlist}
      */
     public static Playlist createPlaylist(se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified spotifyPlaylist) {

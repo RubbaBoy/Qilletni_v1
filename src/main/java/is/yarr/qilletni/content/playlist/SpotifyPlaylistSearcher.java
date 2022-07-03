@@ -33,6 +33,5 @@ public class SpotifyPlaylistSearcher implements PlaylistSearcher {
                 .offset(offset)
                 .build()
                 .executeAsync()
-                .thenApply(playlistPaging -> Arrays.stream(playlistPaging.getItems()).map(PlaylistFactory::createPlaylist).toList());
-    }
+                .thenApply(playlistPaging -> Arrays.stream(playlistPaging.getItems()).map(PlaylistFactory::createPlaylist).toList());    }
 }

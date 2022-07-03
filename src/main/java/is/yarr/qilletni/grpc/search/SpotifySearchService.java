@@ -1,6 +1,8 @@
 package is.yarr.qilletni.grpc.search;
 
 import io.grpc.stub.StreamObserver;
+import is.yarr.qilletni.content.album.AlbumSearcher;
+import is.yarr.qilletni.content.artist.ArtistSearcher;
 import is.yarr.qilletni.content.playlist.PlaylistSearcher;
 import is.yarr.qilletni.content.song.SongSearcher;
 import is.yarr.qilletni.grpc.GRPCEntityFactory;
@@ -12,8 +14,6 @@ import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySearchQuery;
 import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySearchServiceGrpc;
 import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySongResponse;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 
 import static is.yarr.qilletni.grpc.security.Authorities.GENERAL;
@@ -23,14 +23,16 @@ public class SpotifySearchService extends SpotifySearchServiceGrpc.SpotifySearch
 
     private static final int DEFAULT_LIMIT = 10;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpotifySearchService.class);
-
     private final SongSearcher songSearcher;
     private final PlaylistSearcher playlistSearcher;
+    private final AlbumSearcher albumSearcher;
+    private final ArtistSearcher artistSearcher;
 
-    public SpotifySearchService(SongSearcher songSearcher, PlaylistSearcher playlistSearcher) {
+    public SpotifySearchService(SongSearcher songSearcher, PlaylistSearcher playlistSearcher, AlbumSearcher albumSearcher, ArtistSearcher artistSearcher) {
         this.songSearcher = songSearcher;
         this.playlistSearcher = playlistSearcher;
+        this.albumSearcher = albumSearcher;
+        this.artistSearcher = artistSearcher;
     }
 
     @Override
@@ -72,9 +74,9 @@ public class SpotifySearchService extends SpotifySearchServiceGrpc.SpotifySearch
         }
 
         playlistSearcher.searchPlaylists(query, limit, offset)
-                .thenApply(songs -> songs.stream().map(GRPCEntityFactory::createGRPCPlaylist).toList())
-                .thenAccept(grpcSongs -> responseObserver.onNext(SpotifyPlaylistResponse.newBuilder()
-                        .addAllPlaylists(grpcSongs)
+                .thenApply(playlists -> playlists.stream().map(GRPCEntityFactory::createGRPCPlaylist).toList())
+                .thenAccept(grpcPlaylists -> responseObserver.onNext(SpotifyPlaylistResponse.newBuilder()
+                        .addAllPlaylists(grpcPlaylists)
                         .build()))
                 .whenComplete(($, throwable) ->
                         ResponseUtility.terminallyReportError(throwable, responseObserver, "An exception occurred while searching for playlists",
@@ -84,12 +86,48 @@ public class SpotifySearchService extends SpotifySearchServiceGrpc.SpotifySearch
     @Override
     @Secured({GENERAL})
     public void searchAlbums(SpotifySearchQuery request, StreamObserver<SpotifyAlbumResponse> responseObserver) {
-        // TODO: searchAlbums
+        var query = request.getQuery();
+        var limit = request.hasLimit() ? request.getLimit() : DEFAULT_LIMIT;
+        var offset = request.hasOffset() ? request.getOffset() : 0;
+
+        if (query.isBlank()) {
+            responseObserver.onNext(SpotifyAlbumResponse.newBuilder()
+                    .setError(ResponseUtility.createError("Invalid query", 400)).build());
+            responseObserver.onCompleted();
+            return;
+        }
+
+        albumSearcher.searchAlbums(query, limit, offset)
+                .thenApply(albums -> albums.stream().map(GRPCEntityFactory::createGRPCAlbum).toList())
+                .thenAccept(grpcAlbums -> responseObserver.onNext(SpotifyAlbumResponse.newBuilder()
+                        .addAllAlbums(grpcAlbums)
+                        .build()))
+                .whenComplete(($, throwable) ->
+                        ResponseUtility.terminallyReportError(throwable, responseObserver, "An exception occurred while searching for albums",
+                                responseError -> SpotifyAlbumResponse.newBuilder().setError(responseError).build()));
     }
 
     @Override
     @Secured({GENERAL})
     public void searchArtists(SpotifySearchQuery request, StreamObserver<SpotifyArtistResponse> responseObserver) {
-        // TODO: searchArtists
+        var query = request.getQuery();
+        var limit = request.hasLimit() ? request.getLimit() : DEFAULT_LIMIT;
+        var offset = request.hasOffset() ? request.getOffset() : 0;
+
+        if (query.isBlank()) {
+            responseObserver.onNext(SpotifyArtistResponse.newBuilder()
+                    .setError(ResponseUtility.createError("Invalid query", 400)).build());
+            responseObserver.onCompleted();
+            return;
+        }
+
+        artistSearcher.searchArtists(query, limit, offset)
+                .thenApply(artists -> artists.stream().map(GRPCEntityFactory::createGRPCArtist).toList())
+                .thenAccept(grpcArtists -> responseObserver.onNext(SpotifyArtistResponse.newBuilder()
+                        .addAllArtists(grpcArtists)
+                        .build()))
+                .whenComplete(($, throwable) ->
+                        ResponseUtility.terminallyReportError(throwable, responseObserver, "An exception occurred while searching for artists",
+                                responseError -> SpotifyArtistResponse.newBuilder().setError(responseError).build()));
     }
 }
