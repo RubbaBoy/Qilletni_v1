@@ -10,7 +10,6 @@ import is.yarr.qilletni.grpc.gen.search.spotify.SpotifyPlaylistResponse;
 import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySearchQuery;
 import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySearchServiceGrpc;
 import is.yarr.qilletni.grpc.gen.search.spotify.SpotifySongResponse;
-import is.yarr.qilletni.grpc.security.UserSessionSecurityContext;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,17 +48,9 @@ public class SpotifySearchService extends SpotifySearchServiceGrpc.SpotifySearch
                 .thenApply(songs -> songs.stream().map(GRPCEntityFactory::createGRPCSong).toList())
                 .thenAccept(grpcSongs -> responseObserver.onNext(SpotifySongResponse.newBuilder()
                         .addAllSongs(grpcSongs)
-                        .build())).whenComplete(($, throwable) -> {
-                    // TODO: Streamline error reporting across classes?
-                    if (throwable != null) {
-                        LOGGER.error("An exception occurred while searching for songs", throwable);
-
-                        responseObserver.onNext(SpotifySongResponse.newBuilder()
-                                .setError(ResponseUtility.createErrorFromThrowable(throwable)).build());
-                    }
-
-                    responseObserver.onCompleted();
-                });
+                        .build())).whenComplete(($, throwable) ->
+                        ResponseUtility.terminallyReportError(throwable, responseObserver, "An exception occurred while searching for songs",
+                                responseError -> SpotifySongResponse.newBuilder().setError(responseError).build()));
     }
 
     @Override

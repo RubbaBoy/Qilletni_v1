@@ -52,15 +52,7 @@ public class ComponentRequestService extends ComponentRequestServiceGrpc.Compone
                         responseObserver.onNext(StructureResponse.newBuilder()
                                 .addAllComponents(componentResponses)
                                 .build()))
-                .whenComplete(($, throwable) -> {
-                    if (throwable != null) {
-                        LOGGER.error("An exception occurred while retrieving components", throwable);
-
-                        responseObserver.onNext(StructureResponse.newBuilder()
-                                .setError(ResponseUtility.createErrorFromThrowable(throwable)).build());
-                    }
-
-                    responseObserver.onCompleted();
-                });
+                .whenComplete(($, throwable) -> ResponseUtility.terminallyReportError(throwable, responseObserver, "An exception occurred while retrieving components",
+                        responseError -> StructureResponse.newBuilder().setError(responseError).build()));
     }
 }
