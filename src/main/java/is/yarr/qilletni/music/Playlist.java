@@ -27,25 +27,18 @@ public interface Playlist {
     String getOwner();
 
     /**
-     * Gets the direct artwork URL of the song.
+     * Gets the direct artwork URL of the playlist.
      *
      * @return The artwork URL
      */
     String getArtworkUrl();
 
     /**
-     * Gets the followers of the playlist.
+     * Gets the amount of songs in the playlist.
      *
-     * @return The playlist's followers
+     * @return The amount of songs
      */
-    int getFollowers();
-
-    /**
-     * Gets the description of the playlist.
-     *
-     * @return The playlist's description
-     */
-    String getDescription();
+    int getSize();
 
     /**
      * Gets if the playlist is visible to the public.

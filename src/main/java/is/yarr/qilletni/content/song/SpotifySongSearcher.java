@@ -22,7 +22,7 @@ public class SpotifySongSearcher implements SongSearcher {
     }
 
     @Override
-    public CompletableFuture<List<Song>> searchSong(String query, int limit, int offset) {
+    public CompletableFuture<List<Song>> searchSongs(String query, int limit, int offset) {
         var spotifyApi = spotifyApiFactory.createClientCredentialsApi();
 
         LOGGER.debug("Searching songs for: {}", query);

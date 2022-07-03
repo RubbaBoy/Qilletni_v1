@@ -65,8 +65,7 @@ public class GRPCEntityFactory {
                 .setName(playlist.getName())
                 .setOwner(playlist.getOwner())
                 .setArtworkUrl(playlist.getArtworkUrl())
-                .setFollowers(playlist.getFollowers())
-                .setDescription(playlist.getDescription())
+                .setSize(playlist.getSize())
                 .build();
     }
 
